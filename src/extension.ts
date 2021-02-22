@@ -71,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 				console.log(`Got state: ${state}`);
 				// Reset the webview options so we use latest uri for `localResourceRoots`.
 				webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
-				GamePreviewPanel.revive(webviewPanel, context.extensionUri, sbpgPath);
+				LevelEditorPanel.revive(webviewPanel, context.extensionUri, sbpgPath);
 			}
 		});
 	}
