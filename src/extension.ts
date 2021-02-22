@@ -49,6 +49,11 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 	}
+
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleGamePreview', () => {
+		GamePreviewPanel.createOrShow(context.extensionUri, onDiskPath);
+	}));
+
 }
 
 // this method is called when your extension is deactivated

@@ -12,10 +12,20 @@
   "activationEvents": [
     "onCommand:puzzlescript.helloWorld",
     "onCommand:puzzlescript.gamePreview",
-    "onWebviewPanel:catCoding"
+    "onCommand:puzzlescript.toggleGamePreview",
+    "onWebviewPanel:gamePreview"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "languages": [{
+      "id": "puzzlescript",
+      "aliases": ["PuzzleScript", "puzzlescript"],
+      "extensions": [
+        ".pzls"
+      ],
+      "configuration": "./language-configuration.json"
+    }],
+
     "commands": [
       {
         "command": "puzzlescript.helloWorld",
@@ -25,7 +35,20 @@
 				"command": "puzzlescript.gamePreview",
 				"title": "View Game Preview",
 				"category": "PuzzleScript"
-			}
+			},
+      {
+        "command": "puzzlescript.toggleGamePreview",
+        "title": "Toggle Game Preview",
+        "category": "PuzzleScript"
+      }
+    ],
+    "keybindings": [
+      { 
+        "command": "puzzlescript.toggleGamePreview",
+        "key": "shift+ctrl+v",
+        "mac": "shift+ctrl+v",
+        "when": "editorLangId == puzzlescript"
+      }
     ]
   },
   "scripts": {
