@@ -10,7 +10,9 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:puzzlescript.helloWorld"
+    "onCommand:puzzlescript.helloWorld",
+    "onCommand:puzzlescript.gamePreview",
+    "onWebviewPanel:catCoding"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -18,7 +20,12 @@
       {
         "command": "puzzlescript.helloWorld",
         "title": "Hello World"
-      }
+      },
+      {
+				"command": "puzzlescript.gamePreview",
+				"title": "View Game Preview",
+				"category": "PuzzleScript"
+			}
     ]
   },
   "scripts": {

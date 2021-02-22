@@ -1,6 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as path from 'path';
+let fs = require("fs");
+
+const cats = {
+	'Coding Cat': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
+	'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
+	'Testing Cat': 'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif'
+};
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -21,7 +29,158 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	/*
+	 * WebView code adapted from VSCode
+	 * WebView api sample:
+	 * https://github.com/microsoft/vscode-extension-samples/tree/master/webview-sample
+	 * Licensed under the MIT license.
+	 */
+
+    const onDiskPath = vscode.Uri.file(
+		path.join(context.extensionPath, 'media', 'sbpg.html')
+    );
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.gamePreview', () => {
+		CatCodingPanel.createOrShow(context.extensionUri, onDiskPath);
+	}));
+
+	if (vscode.window.registerWebviewPanelSerializer) {
+		// Make sure we register a serializer in activation event
+		vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
+			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+				console.log(`Got state: ${state}`);
+				// Reset the webview options so we use latest uri for `localResourceRoots`.
+				webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
+				CatCodingPanel.revive(webviewPanel, context.extensionUri, onDiskPath);
+			}
+		});
+	}
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
+
+function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
+	return {
+		// Enable javascript in the webview
+		enableScripts: true,
+
+		// And restrict the webview to only loading content from our extension's `media` directory.
+		localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')]
+	};
+}
+
+/**
+ * Manages cat coding webview panels
+ */
+class CatCodingPanel {
+	/**
+	 * Track the currently panel. Only allow a single panel to exist at a time.
+	 */
+	public static currentPanel: CatCodingPanel | undefined;
+
+	public static readonly viewType = 'catCoding';
+
+	private readonly _panel: vscode.WebviewPanel;
+	private readonly _extensionUri: vscode.Uri;
+	private _disposables: vscode.Disposable[] = [];
+	private _sbpg_uri: vscode.Uri;
+
+	public static createOrShow(extensionUri: vscode.Uri, onDiskPath: vscode.Uri) {
+		const column = vscode.window.activeTextEditor
+			? vscode.window.activeTextEditor.viewColumn
+			: undefined;
+		// If we already have a panel, show it.
+		if (CatCodingPanel.currentPanel) {
+			CatCodingPanel.currentPanel._panel.reveal(column);
+			return;
+		}
+
+		// Otherwise, create a new panel.
+		const panel = vscode.window.createWebviewPanel(
+			CatCodingPanel.viewType,
+			'Cat Coding',
+			column || vscode.ViewColumn.One,
+			getWebviewOptions(extensionUri),
+		);
+
+		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri, onDiskPath);
+	}
+
+	public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, onDiskPath: vscode.Uri) {
+		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri, onDiskPath);
+	}
+
+	private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, sbpg: vscode.Uri) {
+		this._panel = panel;
+		this._extensionUri = extensionUri;
+		this._sbpg_uri = sbpg;
+
+		// Set the webview's initial html content
+		this._update();
+
+		// Listen for when the panel is disposed
+		// This happens when the user closes the panel or when the panel is closed programatically
+		this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+
+		// Update the content based on view changes
+		this._panel.onDidChangeViewState(
+			e => {
+				if (this._panel.visible) {
+					this._update();
+				}
+			},
+			null,
+			this._disposables
+		);
+
+		// Handle messages from the webview
+		this._panel.webview.onDidReceiveMessage(
+			message => {
+				switch (message.command) {
+					case 'alert':
+						vscode.window.showErrorMessage(message.text);
+						return;
+				}
+			},
+			null,
+			this._disposables
+		);
+	}
+
+	public dispose() {
+		CatCodingPanel.currentPanel = undefined;
+
+		// Clean up our resources
+		this._panel.dispose();
+
+		while (this._disposables.length) {
+			const x = this._disposables.pop();
+			if (x) {
+				x.dispose();
+			}
+		}
+	}
+
+	private _update() {
+		const webview = this._panel.webview;
+
+		// Vary the webview's content based on where it is located in the editor.
+		this._panel.title = "Game Preview";
+		fs.readFile(this._sbpg_uri.fsPath, "utf8", (data : string, err : any) => {this._panel.webview.html = data;});
+	}
+
+	private _getHtmlForWebview(webview: vscode.Webview) {
+		return `<!DOCTYPE html>
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>Cat Coding</title>
+			</head>
+			<body>
+			<p> Hello world! </p>
+			</body>
+			</html>`;
+	}
+}
