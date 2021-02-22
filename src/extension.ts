@@ -4,12 +4,6 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 let fs = require("fs");
 
-const cats = {
-	'Coding Cat': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
-	'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
-	'Testing Cat': 'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif'
-};
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -167,11 +161,16 @@ class CatCodingPanel {
 
 		// Vary the webview's content based on where it is located in the editor.
 		this._panel.title = "Game Preview";
-		fs.readFile(this._sbpg_uri.fsPath, "utf8", (data : string, err : any) => {this._panel.webview.html = data;});
+		console.log("fspath is: ", this._sbpg_uri.fsPath);
+		console.log("beginning readfile...");
+		fs.readFile(this._sbpg_uri.fsPath, "utf8", (err : string, data : string) => {
+			console.log("File read...");
+			this._panel.webview.html = data;
+		});
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
-		return `<!DOCTYPE html>
+		return `<!DOCTYPE htmlk
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
