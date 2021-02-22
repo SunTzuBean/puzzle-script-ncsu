@@ -64,6 +64,10 @@ export function activate(context: vscode.ExtensionContext) {
 		LevelEditorPanel.createOrShow(context.extensionUri, lvledPath);
 	}));
 
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleLevelEditor', () => {
+		LevelEditorPanel.createOrShow(context.extensionUri, lvledPath);
+	}));
+
 	if (vscode.window.registerWebviewPanelSerializer) {
 		// Make sure we register a serializer in activation event
 		vscode.window.registerWebviewPanelSerializer(LevelEditorPanel.viewType, {
