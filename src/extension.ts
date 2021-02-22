@@ -35,17 +35,17 @@ export function activate(context: vscode.ExtensionContext) {
 		path.join(context.extensionPath, 'media', 'sbpg.html')
     );
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.gamePreview', () => {
-		CatCodingPanel.createOrShow(context.extensionUri, onDiskPath);
+		GamePreviewPanel.createOrShow(context.extensionUri, onDiskPath);
 	}));
 
 	if (vscode.window.registerWebviewPanelSerializer) {
 		// Make sure we register a serializer in activation event
-		vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
+		vscode.window.registerWebviewPanelSerializer(GamePreviewPanel.viewType, {
 			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
 				console.log(`Got state: ${state}`);
 				// Reset the webview options so we use latest uri for `localResourceRoots`.
 				webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
-				CatCodingPanel.revive(webviewPanel, context.extensionUri, onDiskPath);
+				GamePreviewPanel.revive(webviewPanel, context.extensionUri, onDiskPath);
 			}
 		});
 	}
@@ -65,15 +65,15 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 }
 
 /**
- * Manages cat coding webview panels
+ * Manages game preview webview panels
  */
-class CatCodingPanel {
+class GamePreviewPanel {
 	/**
 	 * Track the currently panel. Only allow a single panel to exist at a time.
 	 */
-	public static currentPanel: CatCodingPanel | undefined;
+	public static currentPanel: GamePreviewPanel | undefined;
 
-	public static readonly viewType = 'catCoding';
+	public static readonly viewType = 'gamePreview';
 
 	private readonly _panel: vscode.WebviewPanel;
 	private readonly _extensionUri: vscode.Uri;
@@ -85,24 +85,24 @@ class CatCodingPanel {
 			? vscode.window.activeTextEditor.viewColumn
 			: undefined;
 		// If we already have a panel, show it.
-		if (CatCodingPanel.currentPanel) {
-			CatCodingPanel.currentPanel._panel.reveal(column);
+		if (GamePreviewPanel.currentPanel) {
+			GamePreviewPanel.currentPanel._panel.reveal(column);
 			return;
 		}
 
 		// Otherwise, create a new panel.
 		const panel = vscode.window.createWebviewPanel(
-			CatCodingPanel.viewType,
-			'Cat Coding',
+			GamePreviewPanel.viewType,
+			'Game Preview',
 			column || vscode.ViewColumn.One,
 			getWebviewOptions(extensionUri),
 		);
 
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri, onDiskPath);
+		GamePreviewPanel.currentPanel = new GamePreviewPanel(panel, extensionUri, onDiskPath);
 	}
 
 	public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, onDiskPath: vscode.Uri) {
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri, onDiskPath);
+		GamePreviewPanel.currentPanel = new GamePreviewPanel(panel, extensionUri, onDiskPath);
 	}
 
 	private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, sbpg: vscode.Uri) {
@@ -143,7 +143,7 @@ class CatCodingPanel {
 	}
 
 	public dispose() {
-		CatCodingPanel.currentPanel = undefined;
+		GamePreviewPanel.currentPanel = undefined;
 
 		// Clean up our resources
 		this._panel.dispose();
@@ -167,19 +167,5 @@ class CatCodingPanel {
 			console.log("File read...");
 			this._panel.webview.html = data;
 		});
-	}
-
-	private _getHtmlForWebview(webview: vscode.Webview) {
-		return `<!DOCTYPE htmlk
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>Cat Coding</title>
-			</head>
-			<body>
-			<p> Hello world! </p>
-			</body>
-			</html>`;
 	}
 }
