@@ -31,11 +31,12 @@ export function activate(context: vscode.ExtensionContext) {
 	 * Licensed under the MIT license.
 	 */
 
-    const onDiskPath = vscode.Uri.file(
+    const sbpgPath = vscode.Uri.file(
 		path.join(context.extensionPath, 'media', 'sbpg.html')
     );
+
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.gamePreview', () => {
-		GamePreviewPanel.createOrShow(context.extensionUri, onDiskPath);
+		GamePreviewPanel.createOrShow(context.extensionUri, sbpgPath);
 	}));
 
 	if (vscode.window.registerWebviewPanelSerializer) {
@@ -45,15 +46,35 @@ export function activate(context: vscode.ExtensionContext) {
 				console.log(`Got state: ${state}`);
 				// Reset the webview options so we use latest uri for `localResourceRoots`.
 				webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
-				GamePreviewPanel.revive(webviewPanel, context.extensionUri, onDiskPath);
+				GamePreviewPanel.revive(webviewPanel, context.extensionUri, sbpgPath);
 			}
 		});
 	}
 
+
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleGamePreview', () => {
-		GamePreviewPanel.createOrShow(context.extensionUri, onDiskPath);
+		GamePreviewPanel.createOrShow(context.extensionUri, sbpgPath);
 	}));
 
+    const lvledPath = vscode.Uri.file(
+		path.join(context.extensionPath, 'media', 'lvled.html')
+    );
+
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.levelEditor', () => {
+		LevelEditorPanel.createOrShow(context.extensionUri, lvledPath);
+	}));
+
+	if (vscode.window.registerWebviewPanelSerializer) {
+		// Make sure we register a serializer in activation event
+		vscode.window.registerWebviewPanelSerializer(LevelEditorPanel.viewType, {
+			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+				console.log(`Got state: ${state}`);
+				// Reset the webview options so we use latest uri for `localResourceRoots`.
+				webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
+				GamePreviewPanel.revive(webviewPanel, context.extensionUri, sbpgPath);
+			}
+		});
+	}
 }
 
 // this method is called when your extension is deactivated
@@ -83,7 +104,7 @@ class GamePreviewPanel {
 	private readonly _panel: vscode.WebviewPanel;
 	private readonly _extensionUri: vscode.Uri;
 	private _disposables: vscode.Disposable[] = [];
-	private _sbpg_uri: vscode.Uri;
+	private _sourceUri: vscode.Uri;
 
 	public static createOrShow(extensionUri: vscode.Uri, onDiskPath: vscode.Uri) {
 		const column = vscode.window.activeTextEditor
@@ -113,7 +134,7 @@ class GamePreviewPanel {
 	private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, sbpg: vscode.Uri) {
 		this._panel = panel;
 		this._extensionUri = extensionUri;
-		this._sbpg_uri = sbpg;
+		this._sourceUri = sbpg;
 
 		// Set the webview's initial html content
 		this._update();
@@ -166,9 +187,115 @@ class GamePreviewPanel {
 
 		// Vary the webview's content based on where it is located in the editor.
 		this._panel.title = "Game Preview";
-		console.log("fspath is: ", this._sbpg_uri.fsPath);
+		console.log("fspath is: ", this._sourceUri.fsPath);
 		console.log("beginning readfile...");
-		fs.readFile(this._sbpg_uri.fsPath, "utf8", (err : string, data : string) => {
+		fs.readFile(this._sourceUri.fsPath, "utf8", (err : string, data : string) => {
+			console.log("File read...");
+			this._panel.webview.html = data;
+		});
+	}
+}
+
+/**
+ * Manages level editor panel
+ */
+class LevelEditorPanel {
+	/**
+	 * Track the currently panel. Only allow a single panel to exist at a time.
+	 */
+	public static currentPanel: LevelEditorPanel | undefined;
+
+	public static readonly viewType = 'levelEditor';
+
+	private readonly _panel: vscode.WebviewPanel;
+	private readonly _extensionUri: vscode.Uri;
+	private _disposables: vscode.Disposable[] = [];
+	private _sourceUri: vscode.Uri;
+
+	public static createOrShow(extensionUri: vscode.Uri, onDiskPath: vscode.Uri) {
+		const column = vscode.window.activeTextEditor
+			? vscode.window.activeTextEditor.viewColumn
+			: undefined;
+		// If we already have a panel, show it.
+		if (LevelEditorPanel.currentPanel) {
+			LevelEditorPanel.currentPanel._panel.reveal(column);
+			return;
+		}
+
+		// Otherwise, create a new panel.
+		const panel = vscode.window.createWebviewPanel(
+			LevelEditorPanel.viewType,
+			'Level Editor',
+			column || vscode.ViewColumn.One,
+			getWebviewOptions(extensionUri),
+		);
+
+		LevelEditorPanel.currentPanel = new LevelEditorPanel(panel, extensionUri, onDiskPath);
+	}
+
+	public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, onDiskPath: vscode.Uri) {
+		LevelEditorPanel.currentPanel = new LevelEditorPanel(panel, extensionUri, onDiskPath);
+	}
+
+	private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, sbpg: vscode.Uri) {
+		this._panel = panel;
+		this._extensionUri = extensionUri;
+		this._sourceUri = sbpg;
+
+		// Set the webview's initial html content
+		this._update();
+
+		// Listen for when the panel is disposed
+		// This happens when the user closes the panel or when the panel is closed programatically
+		this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+
+		// Update the content based on view changes
+		this._panel.onDidChangeViewState(
+			e => {
+				if (this._panel.visible) {
+					this._update();
+				}
+			},
+			null,
+			this._disposables
+		);
+
+		// Handle messages from the webview
+		this._panel.webview.onDidReceiveMessage(
+			message => {
+				switch (message.command) {
+					case 'alert':
+						vscode.window.showErrorMessage(message.text);
+						return;
+				}
+			},
+			null,
+			this._disposables
+		);
+	}
+
+	public dispose() {
+		LevelEditorPanel.currentPanel = undefined;
+
+		// Clean up our resources
+		this._panel.dispose();
+
+		while (this._disposables.length) {
+			const x = this._disposables.pop();
+			if (x) {
+				x.dispose();
+			}
+		}
+	}
+
+	private _update() {
+		const webview = this._panel.webview;
+
+		// Vary the webview's content based on where it is located in the editor.
+		this._panel.title = "Level Editor";
+		console.log("fspath is: ", this._sourceUri.fsPath);
+		console.log("beginning readfile...");
+		fs.readFile(this._sourceUri.fsPath, "utf8", (err : string, data : string) => {
 			console.log("File read...");
 			this._panel.webview.html = data;
 		});

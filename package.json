@@ -13,7 +13,9 @@
     "onCommand:puzzlescript.helloWorld",
     "onCommand:puzzlescript.gamePreview",
     "onCommand:puzzlescript.toggleGamePreview",
-    "onWebviewPanel:gamePreview"
+    "onCommand:puzzlescript.levelEditor",
+    "onWebviewPanel:gamePreview",
+    "onWebviewPanel:levelEditor"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -40,7 +42,12 @@
         "command": "puzzlescript.toggleGamePreview",
         "title": "Toggle Game Preview",
         "category": "PuzzleScript"
-      }
+      },
+      {
+				"command": "puzzlescript.levelEditor",
+				"title": "View Level Editor",
+				"category": "PuzzleScript"
+			}
     ],
     "keybindings": [
       { 
