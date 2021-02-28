@@ -42,35 +42,6 @@
         "command": "puzzlescript.gamePreview",
         "title": "View Game Preview",
         "category": "PuzzleScript"
-      },
-      {
-        "command": "puzzlescript.toggleGamePreview",
-        "title": "Toggle Game Preview",
-        "category": "PuzzleScript"
-      },
-      {
-        "command": "puzzlescript.levelEditor",
-        "title": "View Level Editor",
-        "category": "PuzzleScript"
-      },
-      {
-        "command": "puzzlescript.toggleLevelEditor",
-        "title": "Toggle Level Editor",
-        "category": "PuzzleScript"
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "puzzlescript.toggleGamePreview",
-        "key": "shift+ctrl+v",
-        "mac": "shift+ctrl+v",
-        "when": "editorLangId == puzzlescript"
-      },
-      {
-        "command": "puzzlescript.toggleLevelEditor",
-        "key": "ctrl+k v",
-        "mac": "ctrl+k v",
-        "when": "editorLangId == puzzlescript"
       }
     ]
   },
