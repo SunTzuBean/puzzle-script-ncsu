@@ -22,10 +22,10 @@
         "title": "Hello World"
       },
       {
-				"command": "puzzlescript.gamePreview",
-				"title": "View Game Preview",
-				"category": "PuzzleScript"
-			}
+        "command": "puzzlescript.gamePreview",
+        "title": "View Game Preview",
+        "category": "PuzzleScript"
+      }
     ]
   },
   "scripts": {
@@ -43,7 +43,7 @@
     "@types/vscode": "^1.53.0",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
-    "eslint": "^7.15.0",
+    "eslint": "^7.21.0",
     "glob": "^7.1.6",
     "mocha": "^8.1.3",
     "typescript": "^4.1.2",
