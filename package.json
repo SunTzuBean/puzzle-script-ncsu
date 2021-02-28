@@ -20,50 +20,53 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "languages": [{
-      "id": "puzzlescript",
-      "aliases": ["PuzzleScript", "puzzlescript"],
-      "extensions": [
-        ".pzls"
-      ],
-      "configuration": "./language-configuration.json"
-    }],
-
+    "languages": [
+      {
+        "id": "puzzlescript",
+        "aliases": [
+          "PuzzleScript",
+          "puzzlescript"
+        ],
+        "extensions": [
+          ".pzls"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
     "commands": [
       {
         "command": "puzzlescript.helloWorld",
         "title": "Hello World"
       },
       {
-				"command": "puzzlescript.gamePreview",
-				"title": "View Game Preview",
-				"category": "PuzzleScript"
-			},
+        "command": "puzzlescript.gamePreview",
+        "title": "View Game Preview",
+        "category": "PuzzleScript"
+      },
       {
         "command": "puzzlescript.toggleGamePreview",
         "title": "Toggle Game Preview",
         "category": "PuzzleScript"
       },
       {
-				"command": "puzzlescript.levelEditor",
-				"title": "View Level Editor",
-				"category": "PuzzleScript"
-			},
+        "command": "puzzlescript.levelEditor",
+        "title": "View Level Editor",
+        "category": "PuzzleScript"
+      },
       {
-				"command": "puzzlescript.toggleLevelEditor",
-				"title": "Toggle Level Editor",
-				"category": "PuzzleScript"
-			}
+        "command": "puzzlescript.toggleLevelEditor",
+        "title": "Toggle Level Editor",
+        "category": "PuzzleScript"
+      }
     ],
     "keybindings": [
-      { 
+      {
         "command": "puzzlescript.toggleGamePreview",
         "key": "shift+ctrl+v",
         "mac": "shift+ctrl+v",
         "when": "editorLangId == puzzlescript"
       },
-
-      { 
+      {
         "command": "puzzlescript.toggleLevelEditor",
         "key": "ctrl+k v",
         "mac": "ctrl+k v",
@@ -86,7 +89,7 @@
     "@types/vscode": "^1.53.0",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
-    "eslint": "^7.15.0",
+    "eslint": "^7.21.0",
     "glob": "^7.1.6",
     "mocha": "^8.1.3",
     "typescript": "^4.1.2",
