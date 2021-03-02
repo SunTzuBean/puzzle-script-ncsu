@@ -9,6 +9,7 @@ import * as paths from 'path';
 import * as path from 'path';
 import * as Mocha from 'mocha';
 import * as glob from 'glob';
+import * as process from 'process';
 
 const istanbul = require('istanbul');
 const remapIstanbul = require('remap-istanbul');
@@ -65,8 +66,10 @@ export function run(): Promise<void> {
 				mocha.run(failures => {
 					if (failures > 0) {
 						e(new Error(`${failures} tests failed.`));
+                        process.exit(1);
 					} else {
-            coverageRunner?.reportCoverage();
+                        coverageRunner?.reportCoverage();
+                        process.exit(0);
 						c();
 					}
 				});
