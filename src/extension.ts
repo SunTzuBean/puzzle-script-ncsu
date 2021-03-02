@@ -183,3 +183,7 @@ class CatCodingPanel {
 			</html>`;
 	}
 }
+
+export function poop(x : number, y : number) : number {
+	return x + y + 1;
+}
