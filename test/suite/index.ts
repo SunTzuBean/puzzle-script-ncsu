@@ -13,6 +13,7 @@ import * as process from 'process';
 
 const istanbul = require('istanbul');
 const remapIstanbul = require('remap-istanbul');
+const spawnSync = require("child_process").spawnSync;
 
 function _mkDirIfExists(dir: string): void {
     if (!fs.existsSync(dir)) {
@@ -63,13 +64,15 @@ export function run(): Promise<void> {
 
 			try {
 				// Run the mocha test
+                spawnSync('rm', ['success']);
+                spawnSync('rm', ['failure']);
 				mocha.run(failures => {
 					if (failures > 0) {
 						e(new Error(`${failures} tests failed.`));
-                        process.exit(1);
+                        spawnSync('touch', ['failure']);
 					} else {
                         coverageRunner?.reportCoverage();
-                        process.exit(0);
+                        spawnSync('touch', ['success']);
 						c();
 					}
 				});
