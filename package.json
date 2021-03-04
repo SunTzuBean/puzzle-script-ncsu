@@ -30,10 +30,10 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
+        "compile": "npx tsc -p ./",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",
-        "lint": "eslint src --ext ts",
+        "lint": "npx eslint src --ext ts",
         "test": "node ./out/test/runTest.js",
         "test-jenkins": "JUNIT_REPORT_PATH=/report.xml node ./out/test/runTest.js --colors --reporter mocha-jenkins-reporter"
     },
