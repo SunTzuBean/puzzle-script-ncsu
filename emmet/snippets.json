@@ -4,9 +4,6 @@
       "ps": "{title\nauthor\nhomepage\n\n=======\nOBJECTS\n=======\n\n======\nLEGEND\n======\n\n======\nSOUNDS\n======\n\n===============\nCOLLISIONLAYERS\n===============\n\n=====\nRULES\n=====\n\n=============\nWINCONDITIONS\n=============\n\n======\nLEVELS\n======}",
       "oll": "<ol><li id=${1} class=${2}> Will only work in html </ol>",
       "ran": "{ Wrap plain text in curly braces }"
-    },
-    "abbreviations": {
-      "ps": ""
     }
   },
 
