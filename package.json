@@ -19,6 +19,26 @@
         "command": "puzzlescript.helloWorld",
         "title": "Hello World"
       }
+    ],
+    "languages": [
+      {
+        "id": "pzls",
+        "aliases": [
+          "PuzzleScript",
+          "pzls"
+        ],
+        "extensions": [
+          ".pzls"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pzls",
+        "scopeName": "source.pzls",
+        "path": "./syntaxes/pzls.tmLanguage.json"
+      }
     ]
   },
   "scripts": {
