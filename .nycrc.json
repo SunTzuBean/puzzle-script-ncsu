@@ -1,0 +1,6 @@
+{
+    "sourceMap": true,
+    "produce-source-map": true,
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true
+}

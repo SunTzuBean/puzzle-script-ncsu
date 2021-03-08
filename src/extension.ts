@@ -88,3 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}
 }
+
+export function poop(x : number, y : number) : number {
+	return x + y + 1;
+}

@@ -47,9 +47,16 @@ $RECYCLE.BIN/
 
 out/*
 node_modules/
-coverage/
-.nyc_output/
 .vscode-test/
+.nyc_output/
 report.xml
+typings/
+coverage/
 success
 failure
+
+
+
+
+
+
