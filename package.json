@@ -4,7 +4,8 @@
     "description": "A PuzzleScript language extension that provides syntax highlighting, code completion, level editors, and much more from inside VS Code.",
     "version": "0.0.1",
     "engines": {
-        "vscode": "^1.53.0"
+        "vscode": "^1.53.0",
+        "node": "10.24.0"
     },
     "categories": [
         "Other"
