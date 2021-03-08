@@ -28,12 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "puzzlescript" is now active!');
-
-      // Display a message box to the user
-      vscode.window.showInformationMessage("Hello World from PuzzleScript!");
-    }
-  );
-
+	let disposable = vscode.commands.registerCommand('puzzlescript.helloWorld', () => {
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from PuzzleScript!');
 	});
