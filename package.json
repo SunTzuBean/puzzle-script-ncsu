@@ -16,7 +16,8 @@
     "onCommand:puzzlescript.levelEditor",
     "onCommand:puzzlescript.toggleLevelEditor",
     "onWebviewPanel:gamePreview",
-    "onWebviewPanel:levelEditor"
+    "onWebviewPanel:levelEditor",
+    "onCommand:puzzlescript.newFile"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -41,6 +42,11 @@
       {
         "command": "puzzlescript.gamePreview",
         "title": "View Game Preview",
+        "category": "PuzzleScript"
+      },
+      {
+        "command": "puzzlescript.newFile",
+        "title": "Create Template PuzzleScript File",
         "category": "PuzzleScript"
       }
     ]
