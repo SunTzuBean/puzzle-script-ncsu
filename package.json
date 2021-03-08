@@ -62,7 +62,7 @@
         ],
         "grammars": [
           {
-            "language": "pzls",
+            "language": "puzzlescript",
             "scopeName": "source.pzls",
             "path": "./syntaxes/pzls.tmLanguage.json"
           }
