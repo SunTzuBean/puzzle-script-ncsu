@@ -33,13 +33,15 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
         position : vscode.Position,
         completionList : vscode.CompletionItem[]
     ) {
-        let previousLine = document.lineAt(position.line - 1).text;
-        if(previousLine.indexOf('color') !== -1) {
-            let colors = ['Orange', 'Blue', 'Black', 'Green', 'Yellow', 'Red'];
-            for(var i in colors) {
-                const completionItem = new vscode.CompletionItem(colors[i]);
-                completionItem.kind = vscode.CompletionItemKind.Value;
-                completionList.push(completionItem);
+        if (position.line > 0) {
+            let previousLine = document.lineAt(position.line - 1).text;
+            if(previousLine.indexOf('color') !== -1) {
+                let colors = ['Orange', 'Blue', 'Black', 'Green', 'Yellow', 'Red'];
+                for(var i in colors) {
+                    const completionItem = new vscode.CompletionItem(colors[i]);
+                    completionItem.kind = vscode.CompletionItemKind.Value;
+                    completionList.push(completionItem);
+                }
             }
         }
     }
