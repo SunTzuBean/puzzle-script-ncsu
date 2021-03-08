@@ -1,0 +1,82 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "PuzzleScript",
+  "patterns": [
+    {
+      "include": "#classes"
+    },
+    {
+      "include": "#variables"
+    },
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#colors"
+    }
+  ],
+  "repository": {
+    "classes": {
+      "patterns": [
+        {
+          "name": "support.class.objects",
+          "match": "(?i)objects"
+        },
+        {
+          "name": "support.class.collisionlayers",
+          "match": "(?i)collisionlayers"
+        },
+        {
+          "name": "support.class.legend",
+          "match": "(?i)legend"
+        },
+        {
+          "name": "support.class.sounds",
+          "match": "(?i)sounds"
+        },
+        {
+          "name": "support.class.rules",
+          "match": "(?i)rules"
+        },
+        {
+          "name": "support.class.winconditions",
+          "match": "(?i)winconditions"
+        },
+        {
+          "name": "support.class.levels",
+          "match": "(?i)levels"
+        }
+      ]
+    },
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.block",
+          "begin": "\\(",
+          "end": "\\)"
+        }
+      ]
+    },
+    "colors": {
+      "patterns": [
+        {
+          "name": "keyword.black",
+          "match": "(?i)black",
+          "settings": {
+            "foreground": "#000000"
+          }
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "comment": "this needs to not do every word and needs to not overlap with the colors and needs to begin capture and end capture in strange places",
+          "name": "storage.type",
+          "match": "[\\p{L}\\p{N}_]+[\\p{Z}]*w*[a-zA-Z0-9_]"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.pzls"
+}

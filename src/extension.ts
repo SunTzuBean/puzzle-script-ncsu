@@ -15,6 +15,9 @@ let fs = require("fs");
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  // Use the console to output diagnostic information (console.log) and errors (console.error)
+  // This line of code will only be executed once when your extension is activated
+  console.log('Congratulations, your extension "puzzlescript" is now active!');
 
 	let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
 	pzConsole.appendLine(`=================================
@@ -26,11 +29,10 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "puzzlescript" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('puzzlescript.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+      // Display a message box to the user
+      vscode.window.showInformationMessage("Hello World from PuzzleScript!");
+    }
+  );
 
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from PuzzleScript!');
@@ -51,9 +53,9 @@ export function activate(context: vscode.ExtensionContext) {
 	 * Licensed under the MIT license.
 	 */
 
-    const sbpgPath = vscode.Uri.file(
-		path.join(context.extensionPath, 'media', 'sbpg.html')
-    );
+        const sbpgPath = vscode.Uri.file(
+            	path.join(context.extensionPath, 'media', 'sbpg.html')
+        );
 
 	let gp = gamePreview.getGamePreviewPanel(context.extensionPath);
 

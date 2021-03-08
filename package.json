@@ -60,6 +60,13 @@
                 "category": "PuzzleScript"
             }
         ],
+        "grammars": [
+          {
+            "language": "pzls",
+            "scopeName": "source.pzls",
+            "path": "./syntaxes/pzls.tmLanguage.json"
+          }
+        ],
         "keybindings": [
             {
                 "command": "puzzlescript.toggleGamePreview",
