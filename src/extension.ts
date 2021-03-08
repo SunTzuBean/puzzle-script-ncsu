@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { PuzzleScriptCompletionItemProvider } from './completionProvider';
+
 let fs = require("fs");
 
 // this method is called when your extension is activated
@@ -23,6 +25,12 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	// register a new CompletionItemProvider with extension. This provider will add custom code completion using vscode's intellisense.
+	// this completion item provider will only provide completion suggestions when editing puzzlescript files. 
+	let sel : vscode.DocumentSelector = { language : 'puzzlescript', scheme: 'file' };
+	let codeCompletionDisposable = vscode.languages.registerCompletionItemProvider(sel, new PuzzleScriptCompletionItemProvider(), '');
+	context.subscriptions.push(codeCompletionDisposable);
 
 	/*
 	 * WebView code adapted from VSCode

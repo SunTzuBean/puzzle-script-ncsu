@@ -12,7 +12,8 @@
     "activationEvents": [
         "onCommand:puzzlescript.helloWorld",
         "onCommand:puzzlescript.gamePreview",
-        "onWebviewPanel:catCoding"
+        "onWebviewPanel:catCoding",
+        "onLanguage:puzzlescript"
     ],
     "main": "./out/src/extension.js",
     "contributes": {
