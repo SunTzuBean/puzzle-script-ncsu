@@ -6,6 +6,8 @@ import * as facades from './facades';
 import * as gamePreview from "./game-preview";
 import * as levelEditor from "./level-editor";
 import { ENGINE_METHOD_PKEY_METHS } from 'constants';
+import { PuzzleScriptCompletionItemProvider } from './completionProvider';
+
 let fs = require("fs");
 
 
@@ -35,6 +37,12 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	// register a new CompletionItemProvider with extension. This provider will add custom code completion using vscode's intellisense.
+	// this completion item provider will only provide completion suggestions when editing puzzlescript files. 
+	let sel : vscode.DocumentSelector = { language : 'puzzlescript', scheme: 'file' };
+	let codeCompletionDisposable = vscode.languages.registerCompletionItemProvider(sel, new PuzzleScriptCompletionItemProvider(), '');
+	context.subscriptions.push(codeCompletionDisposable);
 
 	/*
 	 * WebView code adapted from VSCode
