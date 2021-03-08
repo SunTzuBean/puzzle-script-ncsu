@@ -34,8 +34,8 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
         completionList : vscode.CompletionItem[]
     ) {
         let previousLine = document.lineAt(position.line - 1).text;
-        if(previousLine.indexOf('color') != -1) {
-            let colors = ['Orange', 'Blue', 'Black', 'Green', 'Yellow'];
+        if(previousLine.indexOf('color') !== -1) {
+            let colors = ['Orange', 'Blue', 'Black', 'Green', 'Yellow', 'Red'];
             for(var i in colors) {
                 const completionItem = new vscode.CompletionItem(colors[i]);
                 completionItem.kind = vscode.CompletionItemKind.Value;
