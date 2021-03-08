@@ -122,6 +122,7 @@ class CoverageRunner {
         });
 
         console.log("BEGIN COVERAGE TO BE GENERATED ON THE FOLLOWING FILES");
+        srcFiles.splice(srcFiles.findIndex((x) => x === "extension.js"), 1);
         srcFiles.forEach(element => {
           console.log(element);
         });

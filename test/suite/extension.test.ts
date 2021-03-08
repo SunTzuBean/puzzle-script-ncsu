@@ -9,8 +9,9 @@ import * as myExtension from "../../src/extension";
 suite('Extension Tests', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
+	// Tests code coverage functionality
 	test('Sample test', () => {
-		myExtension.poop(1, 2);
+		myExtension.poop(2, 2);
 		vscode.commands.executeCommand("puzzlescript.helloWorld");
 		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
 		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
