@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as facades from './facades';
 import * as gamePreview from "./game-preview";
 import * as levelEditor from "./level-editor";
+import { ENGINE_METHOD_PKEY_METHS } from 'constants';
 let fs = require("fs");
 
 
@@ -87,6 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 	}
+
 }
 
 export function poop(x : number, y : number) : number {
