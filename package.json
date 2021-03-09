@@ -16,6 +16,7 @@
         "onCommand:puzzlescript.toggleGamePreview",
         "onCommand:puzzlescript.levelEditor",
         "onCommand:puzzlescript.toggleLevelEditor",
+        "onCommand:puzzlescript.exportHtml",
         "onWebviewPanel:gamePreview",
         "onWebviewPanel:levelEditor"
     ],
@@ -58,6 +59,11 @@
                 "command": "puzzlescript.toggleLevelEditor",
                 "title": "Toggle Level Editor",
                 "category": "PuzzleScript"
+            },
+            {
+                "command": "puzzlescript.exportHtml",
+                "title": "Export to HTML",
+                "category": "PuzzleScript"
             }
         ],
         "grammars": [
@@ -78,6 +84,12 @@
                 "command": "puzzlescript.toggleLevelEditor",
                 "key": "ctrl+k v",
                 "mac": "ctrl+k v",
+                "when": "editorLangId == puzzlescript"
+            },
+            {
+                "command": "puzzlescript.exportHtml",
+                "key": "shift+ctrl+h",
+                "mac": "shift+ctrl+h",
                 "when": "editorLangId == puzzlescript"
             }
         ]
