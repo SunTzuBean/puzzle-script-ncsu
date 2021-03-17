@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as facades from './facades';
 import * as gamePreview from "./game-preview";
 import * as levelEditor from "./level-editor";
+import * as exportHtml from "./export-html";
 import { ENGINE_METHOD_PKEY_METHS } from 'constants';
 import { PuzzleScriptCompletionItemProvider } from './completionProvider';
 
@@ -34,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
 
 	// register a new CompletionItemProvider with extension. This provider will add custom code completion using vscode's intellisense.
 	// this completion item provider will only provide completion suggestions when editing puzzlescript files. 
@@ -93,6 +95,13 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 	}
+
+	// Register the Export to HTML feature
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.exportHtml', () => {
+		exportHtml.exportToHtml();
+	}));
+
+    return
 
 }
 
