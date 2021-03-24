@@ -13,7 +13,11 @@ export function getLevelEditor(extensionPath: string) : facades.Webview {
         public async content() : Promise<string> {
             return new Promise((resolve, reject) => {
                 fs.readFile(levelEditorPath.fsPath, "utf8", (err : string, data : string) => {
-                    resolve(data);
+                    if (data) {
+                        resolve(data);
+                    } else {
+                        reject(err);
+                    }
                 });
             });
         }

@@ -4,14 +4,33 @@ import * as assert from 'assert';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import * as gamePreview from '../../src/game-preview';
+import * as mocha from 'mocha';
 
-suite('Extension Tests', () => {
+
+mocha.suite('Extension Tests', () => {
 	// Tests code coverage functionality
-	test('Game Preview Does Not Error', () => {
-		vscode.commands.executeCommand("puzzlescript.gamePreview");
+	mocha.describe('Game Preview Does Not Error', () => {
+		mocha.it("Should be able to run game preview", function (done) {
+			vscode.commands.executeCommand("puzzlescript.gamePreview")
+			      .then(done);
+		});
+
+		mocha.it("Should be callable more than once", function (done) {
+			vscode.commands.executeCommand("puzzlescript.gamePreview").then(function () {
+				vscode.commands.executeCommand("puzzlescript.gamePreview").then(done);
+			});
+		});
+
+		mocha.it("Should be callable after closing", function (done) {
+			vscode.commands.executeCommand("puzzlescript.gamePreview").then(function () {
+				vscode.commands.executeCommand("workbench.action.closeAllEditors").then( function () {
+					vscode.commands.executeCommand("puzzlescript.gamePreview").then(done);
+				});
+			});
+		});
 	});
 
-	test('Game Preview Correct Title', () => {
+	mocha.test('Game Preview Correct Title', () => {
 		let gp = gamePreview.getGamePreviewPanel('test');
 		assert(gp.viewType() === "gamePreview");
 	});
