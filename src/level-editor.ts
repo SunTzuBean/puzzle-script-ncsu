@@ -4,9 +4,13 @@ import * as facades from './facades';
 import { Webview } from './facades/webview';
 let fs = require("fs");
 
-export function getLevelEditor(extensionPath: string) : facades.Webview {
+export function getLevelEditor(extensionPath: string, gameConsole: vscode.OutputChannel) : facades.Webview {
     const levelEditorPath = vscode.Uri.file(
-		path.join(extensionPath, 'media', 'lvled.html')
+		path.join(extensionPath, 'media', 'standalone.html')
+    );
+
+    const loaddir = vscode.Uri.file(
+        path.join(extensionPath, 'media')
     );
 
     class LevelEditorPanel extends facades.WebviewPanel {
@@ -14,9 +18,16 @@ export function getLevelEditor(extensionPath: string) : facades.Webview {
             return new Promise((resolve, reject) => {
                 fs.readFile(levelEditorPath.fsPath, "utf8", (err : string, data : string) => {
                     if (data) {
-                        resolve(data);
+                        const vscodeLoaddir = this.asWebviewUri(loaddir);
+                        console.log("vscodeLoaddir: ", vscodeLoaddir);
+                        console.log("vscodeLoaddirString: ", vscodeLoaddir?.toString());
+
+                        if (vscodeLoaddir === undefined) {
+                            return reject(err);
+                        }
+                        return resolve(data.split("__LOADDIR__").join(vscodeLoaddir.toString()));
                     } else {
-                        reject(err);
+                        return reject(err);
                     }
                 });
             });
@@ -29,5 +40,5 @@ export function getLevelEditor(extensionPath: string) : facades.Webview {
         }
     }
 
-    return new facades.Webview(new LevelEditorPanel());
+    return new facades.Webview(new LevelEditorPanel(), gameConsole);
 }

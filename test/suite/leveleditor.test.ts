@@ -15,7 +15,8 @@ suite('Extension Tests', () => {
 	});
 
 	test('Test Level Editor Fields', () => {
-		let le = levelEditor.getLevelEditor('test');
+		let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
+		let le = levelEditor.getLevelEditor('test', pzConsole);
 		assert(le.viewType() === "levelEditor");
 		// Will reject because "test" is not a valid path
 	});

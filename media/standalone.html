@@ -225,22 +225,26 @@ a {
 <span id="errormessage" style="color:red;"></span>
 </div>
 
-<script src="PuzzleScript/src/js/globalVariables.js"></script>
-<script src="PuzzleScript/src/js/debug_off.js"></script>
-<script src="PuzzleScript/src/js/font.js"></script>
-<script src="PuzzleScript/src/js/rng.js"></script>
-<script src="PuzzleScript/src/js/riffwave.js"></script>
-<script src="PuzzleScript/src/js/sfxr.js"></script>
-<script src="PuzzleScript/src/js/codemirror/codemirror.js"></script>
-<script src="PuzzleScript/src/js/colors.js"></script>
-<script src="PuzzleScript/src/js/graphics.js"></script>
-<script src="PuzzleScript/src/js/engine.js"></script>
-<script src="PuzzleScript/src/js/parser.js"></script>
-<script src="PuzzleScript/src/js/compiler.js"></script>
-<script src="PuzzleScript/src/js/inputoutput.js"></script>
-<script src="PuzzleScript/src/js/mobile.js"></script>
+<script>
+  const vscode = acquireVsCodeApi();
+  vscode.postMessage({command: "consoleLog", text: "Hi bro"});
+</script>
+<script src="__LOADDIR__/PuzzleScript/src/js/globalVariables.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/debug_off.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/font.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/rng.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/riffwave.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/sfxr.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/codemirror/codemirror.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/colors.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/graphics.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/engine.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/parser.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/compiler.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/inputoutput.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/mobile.js"></script>
 
-<script src="gamedat.js"></script>
+<script src="__LOADDIR__/gamedat.js"></script>
 
 </body>
 </html>

@@ -31,7 +31,9 @@ mocha.suite('Extension Tests', () => {
 	});
 
 	mocha.test('Game Preview Correct Title', () => {
-		let gp = gamePreview.getGamePreviewPanel('test');
+		let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
+
+		let gp = gamePreview.getGamePreviewPanel('test', pzConsole);
 		assert(gp.viewType() === "gamePreview");
 	});
 });

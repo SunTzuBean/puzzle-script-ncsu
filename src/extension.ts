@@ -50,11 +50,11 @@ export function activate(context: vscode.ExtensionContext) {
 	 * Licensed under the MIT license.
 	 */
 
-        const sbpgPath = vscode.Uri.file(
-            	path.join(context.extensionPath, 'media', 'sbpg.html')
-        );
+    const sbpgPath = vscode.Uri.file(
+            path.join(context.extensionPath, 'media', 'sbpg.html')
+    );
 
-	let gp = gamePreview.getGamePreviewPanel(context.extensionPath);
+	let gp = gamePreview.getGamePreviewPanel(context.extensionPath, pzConsole);
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.gamePreview', () => {
 		gp.createOrShow(context.extensionUri);
@@ -75,7 +75,7 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}
 
-	let le = levelEditor.getLevelEditor(context.extensionPath);
+	let le = levelEditor.getLevelEditor(context.extensionPath, pzConsole);
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.levelEditor', () => {
 		le.createOrShow(context.extensionUri);

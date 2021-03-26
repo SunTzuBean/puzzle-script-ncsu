@@ -4,7 +4,7 @@ import * as facades from './facades';
 import { Webview } from './facades/webview';
 let fs = require("fs");
 
-export function getGamePreviewPanel(extensionPath: string) : facades.Webview {
+export function getGamePreviewPanel(extensionPath: string, gameConsole: vscode.OutputChannel) : facades.Webview {
     const sbpgPath = vscode.Uri.file(
         path.join(extensionPath, 'media', 'sbpg.html')
     );
@@ -25,5 +25,5 @@ export function getGamePreviewPanel(extensionPath: string) : facades.Webview {
         }
     }
 
-    return new facades.Webview(new GamePreviewPanel());
+    return new facades.Webview(new GamePreviewPanel(), gameConsole);
 }
