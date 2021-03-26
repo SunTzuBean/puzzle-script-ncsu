@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PuzzleScript Level Editor</title>
+<title>__TITLE__</title>
 <style>
 
 body {
@@ -212,7 +212,7 @@ a {
 </head>
 
 <body>
-<div class="title"><h1>PuzzleScript Level Editor</h1></div>
+<div class="title"><h1>__TITLE__</h1></div>
 <div class="gameContainer">
 <canvas
     id="gameCanvas"
@@ -240,8 +240,6 @@ a {
 <script src="__LOADDIR__/PuzzleScript/src/js/inputoutput.js"></script>
 <script src="__LOADDIR__/PuzzleScript/src/js/mobile.js"></script>
 
-<script src="__LOADDIR__/gamedat.js"></script>
-
 <script>
   const vscode = acquireVsCodeApi();
   // Redirect console output to vscode
@@ -257,6 +255,19 @@ a {
       case "levelEditor": {
           compile(["loadLevel", 0], sourceCode);
           levelEditorOpened = true;
+          regenSpriteImages();
+          generateGlyphImages();
+          canvasResize();
+          lastDownTarget = canvas;
+          // Need to regenerate the glyph images and re-resize the canvas
+          // to get things sized properly. No idea why. 
+          generateGlyphImages();
+          canvasResize();
+          break;
+      }
+      case "gamePreview": {
+          levelEditorOpened = false;
+          compile(["restart"], sourceCode);
           regenSpriteImages();
           generateGlyphImages();
           canvasResize();

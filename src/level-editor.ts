@@ -20,8 +20,6 @@ export function getLevelEditor(extensionPath: string, gameConsole: vscode.Output
                 fs.readFile(levelEditorPath.fsPath, "utf8", (err : string, data : string) => {
                     if (data) {
                         const vscodeLoaddir = this.asWebviewUri(loaddir);
-                        console.log("vscodeLoaddir: ", vscodeLoaddir);
-                        console.log("vscodeLoaddirString: ", vscodeLoaddir?.toString());
 
                         if (vscodeLoaddir === undefined) {
                             return reject(err);

@@ -57,10 +57,12 @@ export function activate(context: vscode.ExtensionContext) {
 	let gp = gamePreview.getGamePreviewPanel(context.extensionPath, pzConsole);
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.gamePreview', () => {
+		gp.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
 		gp.createOrShow(context.extensionUri);
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleGamePreview', () => {
+		gp.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
 		gp.createOrShow(context.extensionUri);
 	}));
 
@@ -83,6 +85,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleLevelEditor', () => {
+		le.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
 		le.createOrShow(context.extensionUri);
 	}));
 
