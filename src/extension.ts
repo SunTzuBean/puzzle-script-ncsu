@@ -78,6 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let le = levelEditor.getLevelEditor(context.extensionPath, pzConsole);
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.levelEditor', () => {
+		le.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
 		le.createOrShow(context.extensionUri);
 	}));
 

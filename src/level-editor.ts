@@ -14,6 +14,7 @@ export function getLevelEditor(extensionPath: string, gameConsole: vscode.Output
     );
 
     class LevelEditorPanel extends facades.WebviewPanel {
+        private textBeforeInit: string | undefined;
         public async content() : Promise<string> {
             return new Promise((resolve, reject) => {
                 fs.readFile(levelEditorPath.fsPath, "utf8", (err : string, data : string) => {
@@ -37,6 +38,13 @@ export function getLevelEditor(extensionPath: string, gameConsole: vscode.Output
         }
         public viewType() {
             return "levelEditor";
+        }
+
+        /**
+         * Runs after initialization, setting up the game data.
+         */
+        public afterInitialization() : void {
+            this.postMessage({command: "levelEditor"});
         }
     }
 

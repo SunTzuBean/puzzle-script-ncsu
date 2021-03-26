@@ -25,6 +25,13 @@ export abstract class WebviewPanel {
 	abstract content() : Promise<string>;
 	abstract viewType() : string;
 	abstract title() : string;
+
+	public afterInitialization() : void {
+		// By default, do nothing
+	};
+	public postMessage(json: any) : void {
+		this.innerPanel?.webview.postMessage(json);
+	}
 }
 
 /**
@@ -35,11 +42,17 @@ export class Webview {
 	private _options : WebviewPanel;
 	private _disposables: vscode.Disposable[] = [];
 	private _console: vscode.OutputChannel;
+	private _gameData : string = "";
+
+	public setGameData(str : string) {
+		this._gameData = str;
+	}
 
 	public viewType() : string {
 		return this._options.viewType();
 	}
 
+	
 	public createOrShow(extensionUri: vscode.Uri) {
         if (this._panel) {
 			const column = vscode.window.activeTextEditor
@@ -84,6 +97,13 @@ export class Webview {
 							return;
 						case 'consoleLog':
 							this._console.appendLine(message.text);
+							return;
+						case 'afterInitialization':
+							this._panel?.webview.postMessage({command: "gameData", text: this._gameData});
+							this._options.afterInitialization();
+							return;
+						default: 
+							console.log("message unused", message);
 							return;
 					}
 				},
@@ -132,6 +152,5 @@ export class Webview {
 				}
 			});
 		}
-
 	}
 }

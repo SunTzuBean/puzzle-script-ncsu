@@ -225,10 +225,6 @@ a {
 <span id="errormessage" style="color:red;"></span>
 </div>
 
-<script>
-  const vscode = acquireVsCodeApi();
-  vscode.postMessage({command: "consoleLog", text: "Hi bro"});
-</script>
 <script src="__LOADDIR__/PuzzleScript/src/js/globalVariables.js"></script>
 <script src="__LOADDIR__/PuzzleScript/src/js/debug_off.js"></script>
 <script src="__LOADDIR__/PuzzleScript/src/js/font.js"></script>
@@ -245,6 +241,46 @@ a {
 <script src="__LOADDIR__/PuzzleScript/src/js/mobile.js"></script>
 
 <script src="__LOADDIR__/gamedat.js"></script>
+
+<script>
+  const vscode = acquireVsCodeApi();
+  // Redirect console output to vscode
+  function consolePrint(text, _urgent) {
+      let tmp = document.createElement("div");
+      tmp.innerHTML = text.split("<br>").join("\n");
+      let renderedText = tmp.innerText;
+      vscode.postMessage({command: "consoleLog", text: renderedText});
+  }
+  function handleMessageEvent(event) {
+      const message = event.data;
+      switch (message.command) {
+      case "levelEditor": {
+          compile(["loadLevel", 0], sourceCode);
+          levelEditorOpened = true;
+          regenSpriteImages();
+          generateGlyphImages();
+          canvasResize();
+          lastDownTarget = canvas;
+          // Need to regenerate the glyph images and re-resize the canvas
+          // to get things sized properly. No idea why. 
+          generateGlyphImages();
+          canvasResize();
+          break;
+      }
+      case "gameData": {
+          sourceCode = message.text;
+          break;
+      }
+      default: {
+          vscode.postMessage({command: "alert", text: "Unrecognized command: " + JSON.stringify(message)});
+          break;
+      }
+      }
+  }
+  window.addEventListener('message', handleMessageEvent);
+  vscode.postMessage({command: "afterInitialization"});
+</script>
+
 
 </body>
 </html>
