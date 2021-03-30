@@ -19,7 +19,7 @@ export abstract class WebviewPanel {
 		return undefined;
 	}
 	private innerPanel : vscode.WebviewPanel | undefined;
-	public setInnerPanel(panel : vscode.WebviewPanel) {
+	public setInnerPanel(panel : vscode.WebviewPanel | undefined) {
 		this.innerPanel = panel;
 	}
 	abstract content() : Promise<string>;
@@ -141,6 +141,7 @@ export class Webview {
 		}
 
 		this._panel = undefined;
+		this._options.setInnerPanel(undefined);
 	}
 
 	private _update() {

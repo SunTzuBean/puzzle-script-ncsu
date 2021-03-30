@@ -44,7 +44,7 @@ export function run(): Promise<void> {
 	});
 
 	const testsRoot = path.resolve(__dirname, '..');
-  console.log("testsRoot is: " + testsRoot);
+    console.log("testsRoot is: " + testsRoot);
 
 	return new Promise((c, e) => {
     const coverOptions = _readCoverOptions(testsRoot);

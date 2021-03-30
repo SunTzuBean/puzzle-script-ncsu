@@ -7,7 +7,6 @@ import * as gamePreview from '../../src/game-preview';
 import * as mocha from 'mocha';
 import * as path from 'path';
 
-
 mocha.suite('Extension Tests', () => {
 	// Tests code coverage functionality
 	mocha.describe('Game Preview Does Not Error', () => {
