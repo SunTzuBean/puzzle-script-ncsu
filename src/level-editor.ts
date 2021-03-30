@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as facades from './facades';
 import { Webview } from './facades/webview';
+import { assert } from 'console';
 let fs = require("fs");
 
 export function getLevelEditor(extensionPath: string, gameConsole: vscode.OutputChannel) : facades.Webview {
@@ -20,7 +21,6 @@ export function getLevelEditor(extensionPath: string, gameConsole: vscode.Output
                 fs.readFile(levelEditorPath.fsPath, "utf8", (err : string, data : string) => {
                     if (data) {
                         const vscodeLoaddir = this.asWebviewUri(loaddir);
-
                         if (vscodeLoaddir === undefined) {
                             return reject(err);
                         }

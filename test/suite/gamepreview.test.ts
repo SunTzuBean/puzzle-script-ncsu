@@ -5,6 +5,7 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 import * as gamePreview from '../../src/game-preview';
 import * as mocha from 'mocha';
+import * as path from 'path';
 
 
 mocha.suite('Extension Tests', () => {
@@ -30,10 +31,23 @@ mocha.suite('Extension Tests', () => {
 		});
 	});
 
-	mocha.test('Game Preview Correct Title', () => {
+	mocha.describe('Game Preview Correct Title', () => {
 		let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
 
 		let gp = gamePreview.getGamePreviewPanel('test', pzConsole);
+		mocha.it("Must be GamePreview", function(done) {
+			assert(gp.viewType() === "gamePreview");
+			let dir = path.resolve(__dirname, '../../..');
+			gp.createOrShow(vscode.Uri.file(dir));
+			assert(gp.viewType() === "gamePreview");
+			done();
+		});
+	});
+	
+	mocha.test('Game Preview Reads File Without Crashing', () => {
+		let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
+		let dir = path.resolve(__dirname, '../../..');
+		let gp = gamePreview.getGamePreviewPanel(dir, pzConsole);
 		assert(gp.viewType() === "gamePreview");
 	});
 });

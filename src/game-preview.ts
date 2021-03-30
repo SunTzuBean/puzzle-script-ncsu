@@ -16,10 +16,9 @@ export function getGamePreviewPanel(extensionPath: string, gameConsole: vscode.O
         private textBeforeInit: string | undefined;
         public async content() : Promise<string> {
             return new Promise((resolve, reject) => {
-                fs.readFile(standalonePath.fsPath, "utf8", (err : string, data : string) => {
-                    if (data) {
+                fs.readFile(standalonePath.fsPath, "utf8", (err : string | undefined, data : string | undefined) => {
+                    if (!err && data) {
                         const vscodeLoaddir = this.asWebviewUri(loaddir);
-
                         if (vscodeLoaddir === undefined) {
                             return reject(err);
                         }
