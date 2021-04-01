@@ -28,6 +28,12 @@ mocha.suite('Extension Tests', () => {
 				});
 			});
 		});
+		mocha.it("Should not crash when messaged", function (done) {
+			vscode.commands.executeCommand("puzzlescript.gamePreview").then(function () {
+				console.log("view column is:",  vscode.window.activeTextEditor?.viewColumn);
+				done();
+			});
+		});
 	});
 
 	mocha.describe('Game Preview Correct Title', () => {
