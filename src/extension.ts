@@ -1,17 +1,15 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
-import * as path from 'path';
-import * as facades from './facades';
+import * as vscode from "vscode";
+import * as path from "path";
+import * as facades from "./facades";
 import * as gamePreview from "./game-preview";
 import * as levelEditor from "./level-editor";
 import * as exportHtml from "./export-html";
-import { ENGINE_METHOD_PKEY_METHS } from 'constants';
-import { PuzzleScriptCompletionItemProvider } from './completionProvider';
+import { ENGINE_METHOD_PKEY_METHS } from "constants";
+import { PuzzleScriptCompletionItemProvider } from "./completionProvider";
 
 let fs = require("fs");
-
-
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -20,8 +18,8 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "puzzlescript" is now active!');
 
-	let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
-	pzConsole.appendLine(`=================================
+  let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
+  pzConsole.appendLine(`=================================
    PuzzleScript Log V1.7.0 (build 1663)
 =================================`);
 	pzConsole.show();
@@ -102,13 +100,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register the Export to HTML feature
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.exportHtml', () => {
-		exportHtml.exportToHtml();
+		exportHtml.exportToHtml(context.extensionPath);
 	}));
 
-    return
-
+  return;
 }
 
-export function poop(x : number, y : number) : number {
-	return x + y + 1;
+export function poop(x: number, y: number): number {
+  return x + y + 1;
 }
