@@ -33,10 +33,10 @@ mocha.suite('Extension Tests', () => {
 	mocha.describe('Level Editor Correct Title', () => {
 		let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
 
-		let le = levelEditor.getLevelEditor('test', pzConsole);
+		let dir = path.resolve(__dirname, '../../..');
+		let le = levelEditor.getLevelEditor(dir, pzConsole);
 		mocha.it("Must be LevelEditor", function(done) {
 			assert(le.viewType() === "levelEditor");
-			let dir = path.resolve(__dirname, '../../..');
 			le.createOrShow(vscode.Uri.file(dir));
 			assert(le.viewType() === "levelEditor");
 			done();
@@ -48,6 +48,20 @@ mocha.suite('Extension Tests', () => {
 		let dir = path.resolve(__dirname, '../../..');
 		let le = levelEditor.getLevelEditor(dir, pzConsole);
 		assert(le.viewType() === "levelEditor");
+	});
+
+
+	mocha.describe('Level Editor Fails Read Without Crashing', () => {
+		let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
+
+		let dir = path.resolve(__dirname, 'fooey');
+		let le = levelEditor.getLevelEditor(dir, pzConsole);
+		mocha.it("Must be LevelEditor", function(done) {
+			assert(le.viewType() === "levelEditor");
+			le.createOrShow(vscode.Uri.file(dir));
+			assert(le.viewType() === "levelEditor");
+			done();
+		});
 	});
 	
 });

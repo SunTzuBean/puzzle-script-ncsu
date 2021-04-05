@@ -30,21 +30,32 @@ mocha.suite('Extension Tests', () => {
 		});
 		mocha.it("Should not crash when messaged", function (done) {
 			vscode.commands.executeCommand("puzzlescript.gamePreview").then(function () {
-				console.log("view column is:",  vscode.window.activeTextEditor?.viewColumn);
-				done();
+				setTimeout(() => {
+					console.log("view column is:",  vscode.window.activeTextEditor?.viewColumn);
+					done();	
+				}, 200);
 			});
 		});
 	});
 
-	mocha.describe('Game Preview Correct Title', () => {
+	mocha.describe('Game Preview Constructed Programatically', () => {
 		let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
 
-		let gp = gamePreview.getGamePreviewPanel('test', pzConsole);
+		let dir = path.resolve(__dirname, '../../..');
+		let gp = gamePreview.getGamePreviewPanel(dir, pzConsole);
+
+		mocha.it("must be viewable", function (done) {
+			gp.createOrShow(vscode.Uri.file(dir));
+			done();
+		});
+
 		mocha.it("Must be GamePreview", function(done) {
 			assert(gp.viewType() === "gamePreview");
-			let dir = path.resolve(__dirname, '../../..');
-			gp.createOrShow(vscode.Uri.file(dir));
-			assert(gp.viewType() === "gamePreview");
+			done();
+		});
+
+		mocha.it("Must be reviveable", function(done) {
+			gp.revive(vscode.Uri.file(dir));
 			done();
 		});
 	});
@@ -54,5 +65,19 @@ mocha.suite('Extension Tests', () => {
 		let dir = path.resolve(__dirname, '../../..');
 		let gp = gamePreview.getGamePreviewPanel(dir, pzConsole);
 		assert(gp.viewType() === "gamePreview");
+	});
+
+	mocha.test('Game Preview Fails Read Without Crashing', () => {
+		let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
+
+		let dir = path.resolve(__dirname, 'fooey');
+		let gp = gamePreview.getGamePreviewPanel(dir, pzConsole);
+		mocha.it("Must be GamePreview", function(done) {
+			assert(gp.viewType() === "gamePreview");
+
+			gp.createOrShow(vscode.Uri.file(dir));
+			assert(gp.viewType() === "gamePreview");
+			done();
+		});
 	});
 });

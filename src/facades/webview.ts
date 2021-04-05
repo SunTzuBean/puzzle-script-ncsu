@@ -30,7 +30,9 @@ export abstract class WebviewPanel {
 		// By default, do nothing
 	};
 	public postMessage(json: any) : void {
-		this.innerPanel?.webview.postMessage(json);
+		if (this.innerPanel) {
+			this.innerPanel.webview.postMessage(json);
+		}
 	}
 }
 
