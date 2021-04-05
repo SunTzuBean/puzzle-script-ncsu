@@ -158,10 +158,12 @@ suite('Webview Tests', () => {
 			}
 		}
 		let mp = new MockPanel();
-		let wv = new webview.Webview(mp, gameConsole);
+                let noc = new NotifyingOutputChannel();
+		let wv = new webview.Webview(mp, noc);
 
 		mocha.it('Should Call After Init Hook', (done) => {
 			//mp.afterInitFn = done;
+                        noc.notifyFn = done;
 			wv.createOrShow(vscode.Uri.file('.'));
 		});
 	});
