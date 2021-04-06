@@ -18,7 +18,8 @@
         "onCommand:puzzlescript.toggleLevelEditor",
         "onCommand:puzzlescript.exportHtml",
         "onWebviewPanel:gamePreview",
-        "onWebviewPanel:levelEditor"
+        "onWebviewPanel:levelEditor",
+        "onLanguage:puzzlescript"
     ],
     "main": "./out/src/extension.js",
     "contributes": {
