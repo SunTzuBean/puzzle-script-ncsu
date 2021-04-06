@@ -100,7 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register the Export to HTML feature
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.exportHtml', () => {
-		exportHtml.exportToHtml(context.extensionPath);
+		Promise.all([exportHtml.exportToHtml(context.extensionPath)]);
 	}));
 
   return;

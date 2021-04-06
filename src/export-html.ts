@@ -11,12 +11,14 @@ import { NONAME } from "dns";
 export async function exportToHtml(extensionPath: string) {
   var editor = window.activeTextEditor;
   if (!editor) {
+    vscode.window.showErrorMessage("No open editor");
     return; // No open editor
   }
 
   // Get the open workspace folder and just return if it doesn't exist
   let opendirs = workspace.workspaceFolders;
   if (!opendirs) {
+    vscode.window.showErrorMessage("No open directory");
     return;
   }
 
