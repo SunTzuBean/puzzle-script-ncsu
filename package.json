@@ -93,7 +93,28 @@
                 "mac": "shift+ctrl+h",
                 "when": "editorLangId == puzzlescript"
             }
-        ]
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "when": "resourceLangId == puzzlescript",
+                    "command": "puzzlescript.gamePreview",
+                    "group": "navigation"
+                }
+            ],
+            "editor/title/run": [
+                {
+                    "when": "resourceLangId == puzzlescript",
+                    "command": "puzzlescript.levelEditor",
+                    "group": "1_run"
+                },
+                {
+                    "when": "resourceLangId == puzzlescript",
+                    "command": "puzzlescript.exportHtml",
+                    "group": "1_run"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
