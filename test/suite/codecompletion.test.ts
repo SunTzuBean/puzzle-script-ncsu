@@ -37,7 +37,7 @@ suite('Extension Tests', () => {
             source = new vsc.CancellationTokenSource();
             token = source.token;
             completionprovider.provideCompletionItems(doc, position, token).then((completionItems) => {
-                assert.strictEqual(completionprovider.colors.length, completionItems.length);
+                assert.strictEqual(completionprovider.colors.length + 1, completionItems.length);
             });
         })
     })

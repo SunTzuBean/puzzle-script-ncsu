@@ -14,7 +14,6 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
         this.headerKeywords = ['author', 'again_interval', 'background_color', 'color_palette', 'debug', 'flickscreen', 'homepage', 'key_repeat_interval', 'noaction', 'norepeat_action', 'noundo', 'norestart', 'realtime_interval', 'require_player_movement', 'run_rules_on_level_start', 'scanline', 'text_color', 'title', 'throttle_movement', 'verbose_logging', 'zoomscreen'];
     }
 
-
     public async provideCompletionItems(
         document : vscode.TextDocument,
         position : vscode.Position,
