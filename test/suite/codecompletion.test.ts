@@ -9,8 +9,9 @@ function delay(ms: number) {
 }
 
 suite('Extension Tests', () => {
-    test('Suggest Header', () => {
-        let completionprovider = new PuzzleScriptCompletionItemProvider();
+    let completionprovider = new PuzzleScriptCompletionItemProvider();
+    
+    test('Suggest Headers', () => {
         let dir = path.resolve("../../workspace/puzzlescript/test-files/codeCompletion/empty.pzls");
         vsc.workspace.openTextDocument(dir).then((doc) => {
             let position = new vsc.Position(1, 0);
@@ -21,4 +22,16 @@ suite('Extension Tests', () => {
             });
         })
     });
+
+    test("Suggest Colors", () => {
+        let dir = path.resolve("../../workspace/puzzlescript/test-files/ez.pzls");
+        vsc.workspace.openTextDocument(dir).then((doc) =>{
+            let position = new vsc.Position(10,0);
+            let source = new vsc.CancellationTokenSource();
+            let token = source.token;
+            completionprovider.provideCompletionItems(doc, position, token).then((completionItems) => {
+                assert.strictEqual(completionprovider.colors.length, completionItems.length);
+            });
+        })
+    })
 });
