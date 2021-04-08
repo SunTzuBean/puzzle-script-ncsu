@@ -11,7 +11,7 @@ function delay(ms: number) {
 suite('Extension Tests', () => {
     test('Suggest Header', () => {
         let completionprovider = new PuzzleScriptCompletionItemProvider();
-        let dir = path.resolve("../../test-files/codeCompletion/empty.pzls");
+        let dir = path.resolve("../../workspace/puzzlescript/test-files/codeCompletion/empty.pzls");
         vsc.workspace.openTextDocument(dir).then((doc) => {
             let position = new vsc.Position(1, 0);
             let source = new vsc.CancellationTokenSource();
