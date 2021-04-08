@@ -100,6 +100,8 @@ export class Webview {
 						case 'consoleLog':
 							this._console.appendLine(message.text);
 							return;
+						case 'clearConsole':
+							this._console.clear();
 						case 'afterInitialization':
 							this._panel?.webview.postMessage({command: "gameData", text: this._gameData});
 							this._options.afterInitialization();

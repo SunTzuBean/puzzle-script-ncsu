@@ -294,7 +294,17 @@ a {
 </script>
 
 <!-- sound editor expects that parent.frame exists. -->
-<button type="button" onclick="newSound(1)">poopiepoo</button>
+<button type="button" onclick="vscode.postMessage({command: 'clearConsole'})">Clear Console</button>
+<button type="button" onclick="newSound(0)">Collect Item</button>
+<button type="button" onclick="newSound(7)">Push</button>
+<button type="button" onclick="newSound(2)">Explosion</button>
+<button type="button" onclick="newSound(3)">Power Up</button>
+<button type="button" onclick="newSound(9)">Bird Tweet</button>
+<button type="button" onclick="newSound(4)">Hurt</button>
+<button type="button" onclick="newSound(5)">Jump</button>
+<button type="button" onclick="newSound(1)">Pew Pew</button>
+<button type="button" onclick="newSound(6)">Select</button>
+<button type="button" onclick="newSound(8)">Random</button>
 
 <script>
   parent = {};
