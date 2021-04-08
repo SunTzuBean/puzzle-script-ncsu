@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import * as vsc from 'vscode';
-import { PuzzleScriptCompletionItemProvider } from "../../src/completionProvider"; 
+import { PuzzleScriptCompletionItemProvider } from "../../src/completionProvider";
+import * as path from 'path'; 
 // from '../../src/completionProvider';
 
 function delay(ms: number) {
@@ -10,7 +11,8 @@ function delay(ms: number) {
 suite('Extension Tests', () => {
     test('Suggest Header', () => {
         let completionprovider = new PuzzleScriptCompletionItemProvider();
-        vsc.workspace.openTextDocument("../../test-files/codeCompletion/empty.pzls").then((doc) => {
+        let dir = path.resolve("../../test-files/codeCompletion/empty.pzls");
+        vsc.workspace.openTextDocument(dir).then((doc) => {
             let position = new vsc.Position(1, 0);
             let source = new vsc.CancellationTokenSource();
             let token = source.token;
