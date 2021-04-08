@@ -294,17 +294,39 @@ a {
 </script>
 
 <!-- sound editor expects that parent.frame exists. -->
-<button type="button" onclick="vscode.postMessage({command: 'clearConsole'})">Clear Console</button>
-<button type="button" onclick="newSound(0)">Collect Item</button>
-<button type="button" onclick="newSound(7)">Push</button>
-<button type="button" onclick="newSound(2)">Explosion</button>
-<button type="button" onclick="newSound(3)">Power Up</button>
-<button type="button" onclick="newSound(9)">Bird Tweet</button>
-<button type="button" onclick="newSound(4)">Hurt</button>
-<button type="button" onclick="newSound(5)">Jump</button>
-<button type="button" onclick="newSound(1)">Pew Pew</button>
-<button type="button" onclick="newSound(6)">Select</button>
-<button type="button" onclick="newSound(8)">Random</button>
+<button type="button" onclick="vscode.postMessage({command: 'clearConsole'})">
+  <img src="__LOADDIR__/PuzzleScript/src/images/clearConsole.gif" alt="Clear Console" />
+</button>
+<button type="button" onclick="newSound(0)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio1.gif" alt="Collect Item" />
+</button>
+<button type="button" onclick="newSound(7)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio2.gif" alt="Push" />
+</button>
+<button type="button" onclick="newSound(2)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio3.gif" alt="Explosion" />
+</button>
+<button type="button" onclick="newSound(3)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio4.gif" alt="Power Up" />
+</button>
+<button type="button" onclick="newSound(9)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio5.gif" alt="Bird Tweet" />
+</button>
+<button type="button" onclick="newSound(4)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio6.gif" alt="Hurt" />
+</button>
+<button type="button" onclick="newSound(5)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio7.gif" alt="Jump" />
+</button>
+<button type="button" onclick="newSound(1)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio8.gif" alt="Pew Pew" />
+</button>
+<button type="button" onclick="newSound(6)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio9.gif" alt="Select" />
+</button>
+<button type="button" onclick="newSound(8)">
+  <img src="__LOADDIR__/PuzzleScript/src/images/audio10.gif" alt="Random" />
+</button>
 
 <script>
   parent = {};
