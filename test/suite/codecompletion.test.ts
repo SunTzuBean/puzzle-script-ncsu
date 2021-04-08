@@ -18,7 +18,7 @@ suite('Extension Tests', () => {
             let source = new vsc.CancellationTokenSource();
             let token = source.token;
             completionprovider.provideCompletionItems(doc, position, token).then((completionItems) => {
-                assert.strictEqual(completionprovider.headerKeywords.length + 1, completionItems.length);
+                assert.strictEqual(completionprovider.headerKeywords.length + 2, completionItems.length);
             });
         })
     });
@@ -33,7 +33,7 @@ suite('Extension Tests', () => {
                 assert.strictEqual(completionprovider.colors.length, completionItems.length);
             });
 
-            position = new vsc.Position(3, 18);
+            position = new vsc.Position(2, 18);
             source = new vsc.CancellationTokenSource();
             token = source.token;
             completionprovider.provideCompletionItems(doc, position, token).then((completionItems) => {

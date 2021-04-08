@@ -9,7 +9,7 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
     headerKeywords : string[];
 
     constructor() {
-        this.colors = ['ORAGNGE', 'BLUE', 'BLACK', 'GREEN', 'YELLOW', 'RED', 'BROWN'];
+        this.colors = ['BLACK', 'WHITE', 'LIGHTGRAY', 'GREYGRAY', 'GREY', 'DARKGRAY', 'GREY', 'RED', 'DARKRED', 'LIGHTRED','BROWN', 'DARKBROWN', 'LIGHTBROWN', 'ORANGE', 'YELLOW', 'GREEN', 'DARKGREEN', 'LIGHTGREEN', 'BLUE', 'LIGHTBLUE', 'DARKBLUE', 'PURPLE', 'PINK', 'TRANSPARENT'];
         this.sections = ['OBJECTS', 'LEGEND', 'SOUNDS', 'COLLISIONLAYERS', 'RULES', 'WINCONDITIONS', 'LEVELS'];
         this.headerKeywords = ['author', 'again_interval', 'background_color', 'color_palette', 'debug', 'flickscreen', 'homepage', 'key_repeat_interval', 'noaction', 'norepeat_action', 'noundo', 'norestart', 'realtime_interval', 'require_player_movement', 'run_rules_on_level_start', 'scanline', 'text_color', 'title', 'throttle_movement', 'verbose_logging', 'zoomscreen'];
     }
