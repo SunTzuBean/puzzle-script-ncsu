@@ -294,7 +294,8 @@ a {
 </script>
 
 <!-- sound editor expects that parent.frame exists. -->
-<button type="button" onclick="vscode.postMessage({command: 'clearConsole'})">
+<button type="button" onclick="vscode.postMessage({command: 'clearConsole'})"
+        style="padding: 0; border: none;">
   <img src="__LOADDIR__/PuzzleScript/src/images/clearConsole.gif" alt="Clear Console" />
 </button>
 <button type="button" onclick="newSound(0)">
