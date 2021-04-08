@@ -44,7 +44,7 @@ export function run(): Promise<void> {
 	});
 
 	const testsRoot = path.resolve(__dirname, '..');
-  console.log("testsRoot is: " + testsRoot);
+    console.log("testsRoot is: " + testsRoot);
 
 	return new Promise((c, e) => {
     const coverOptions = _readCoverOptions(testsRoot);
@@ -122,6 +122,7 @@ class CoverageRunner {
         });
 
         console.log("BEGIN COVERAGE TO BE GENERATED ON THE FOLLOWING FILES");
+        srcFiles.splice(srcFiles.findIndex((x) => x === "extension.js"), 1);
         srcFiles.forEach(element => {
           console.log(element);
         });

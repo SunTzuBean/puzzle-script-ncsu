@@ -1,30 +1,39 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
-import * as path from 'path';
-import { PuzzleScriptCompletionItemProvider } from './completionProvider';
+import * as vscode from "vscode";
+import * as path from "path";
+import * as facades from "./facades";
+import * as gamePreview from "./game-preview";
+import * as levelEditor from "./level-editor";
+import * as exportHtml from "./export-html";
+import { ENGINE_METHOD_PKEY_METHS } from "constants";
+import { PuzzleScriptCompletionItemProvider } from "./completionProvider";
 
 let fs = require("fs");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  // Use the console to output diagnostic information (console.log) and errors (console.error)
+  // This line of code will only be executed once when your extension is activated
+  console.log('Congratulations, your extension "puzzlescript" is now active!');
+
+  let pzConsole = vscode.window.createOutputChannel("PuzzleScript");
+  pzConsole.appendLine(`=================================
+   PuzzleScript Log V1.7.0 (build 1663)
+=================================`);
+	pzConsole.show();
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "puzzlescript" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('puzzlescript.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from PuzzleScript!');
 	});
 
 	context.subscriptions.push(disposable);
+
 
 	// register a new CompletionItemProvider with extension. This provider will add custom code completion using vscode's intellisense.
 	// this completion item provider will only provide completion suggestions when editing puzzlescript files. 
@@ -39,159 +48,64 @@ export function activate(context: vscode.ExtensionContext) {
 	 * Licensed under the MIT license.
 	 */
 
-    const onDiskPath = vscode.Uri.file(
-		path.join(context.extensionPath, 'media', 'sbpg.html')
+    const sbpgPath = vscode.Uri.file(
+            path.join(context.extensionPath, 'media', 'sbpg.html')
     );
+
+	let gp = gamePreview.getGamePreviewPanel(context.extensionPath, pzConsole);
+
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.gamePreview', () => {
-		CatCodingPanel.createOrShow(context.extensionUri, onDiskPath);
+		gp.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
+		gp.createOrShow(context.extensionUri);
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleGamePreview', () => {
+		gp.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
+		gp.createOrShow(context.extensionUri);
 	}));
 
 	if (vscode.window.registerWebviewPanelSerializer) {
 		// Make sure we register a serializer in activation event
-		vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
+		vscode.window.registerWebviewPanelSerializer(gp.viewType(), {
 			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
 				console.log(`Got state: ${state}`);
 				// Reset the webview options so we use latest uri for `localResourceRoots`.
-				webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
-				CatCodingPanel.revive(webviewPanel, context.extensionUri, onDiskPath);
+				gp.revive(context.extensionUri);
 			}
 		});
 	}
-}
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+	let le = levelEditor.getLevelEditor(context.extensionPath, pzConsole);
 
-function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
-	return {
-		// Enable javascript in the webview
-		enableScripts: true,
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.levelEditor', () => {
+		le.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
+		le.createOrShow(context.extensionUri);
+	}));
 
-		// And restrict the webview to only loading content from our extension's `media` directory.
-		localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')]
-	};
-}
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleLevelEditor', () => {
+		le.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
+		le.createOrShow(context.extensionUri);
+	}));
 
-/**
- * Manages cat coding webview panels
- */
-class CatCodingPanel {
-	/**
-	 * Track the currently panel. Only allow a single panel to exist at a time.
-	 */
-	public static currentPanel: CatCodingPanel | undefined;
-
-	public static readonly viewType = 'catCoding';
-
-	private readonly _panel: vscode.WebviewPanel;
-	private readonly _extensionUri: vscode.Uri;
-	private _disposables: vscode.Disposable[] = [];
-	private _sbpg_uri: vscode.Uri;
-
-	public static createOrShow(extensionUri: vscode.Uri, onDiskPath: vscode.Uri) {
-		const column = vscode.window.activeTextEditor
-			? vscode.window.activeTextEditor.viewColumn
-			: undefined;
-		// If we already have a panel, show it.
-		if (CatCodingPanel.currentPanel) {
-			CatCodingPanel.currentPanel._panel.reveal(column);
-			return;
-		}
-
-		// Otherwise, create a new panel.
-		const panel = vscode.window.createWebviewPanel(
-			CatCodingPanel.viewType,
-			'Cat Coding',
-			column || vscode.ViewColumn.One,
-			getWebviewOptions(extensionUri),
-		);
-
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri, onDiskPath);
-	}
-
-	public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, onDiskPath: vscode.Uri) {
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri, onDiskPath);
-	}
-
-	private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, sbpg: vscode.Uri) {
-		this._panel = panel;
-		this._extensionUri = extensionUri;
-		this._sbpg_uri = sbpg;
-
-		// Set the webview's initial html content
-		this._update();
-
-		// Listen for when the panel is disposed
-		// This happens when the user closes the panel or when the panel is closed programatically
-		this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-
-		// Update the content based on view changes
-		this._panel.onDidChangeViewState(
-			e => {
-				if (this._panel.visible) {
-					this._update();
-				}
-			},
-			null,
-			this._disposables
-		);
-
-		// Handle messages from the webview
-		this._panel.webview.onDidReceiveMessage(
-			message => {
-				switch (message.command) {
-					case 'alert':
-						vscode.window.showErrorMessage(message.text);
-						return;
-				}
-			},
-			null,
-			this._disposables
-		);
-	}
-
-	public dispose() {
-		CatCodingPanel.currentPanel = undefined;
-
-		// Clean up our resources
-		this._panel.dispose();
-
-		while (this._disposables.length) {
-			const x = this._disposables.pop();
-			if (x) {
-				x.dispose();
+	if (vscode.window.registerWebviewPanelSerializer) {
+		// Make sure we register a serializer in activation event
+		vscode.window.registerWebviewPanelSerializer(le.viewType(), {
+			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+				console.log(`Got state: ${state}`);
+				// Reset the webview options so we use latest uri for `localResourceRoots`.
+				le.revive(context.extensionUri);
 			}
-		}
-	}
-
-	private _update() {
-		const webview = this._panel.webview;
-
-		// Vary the webview's content based on where it is located in the editor.
-		this._panel.title = "Game Preview";
-		console.log("fspath is: ", this._sbpg_uri.fsPath);
-		console.log("beginning readfile...");
-		fs.readFile(this._sbpg_uri.fsPath, "utf8", (err : string, data : string) => {
-			console.log("File read...");
-			this._panel.webview.html = data;
 		});
 	}
 
-	private _getHtmlForWebview(webview: vscode.Webview) {
-		return `<!DOCTYPE htmlk
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>Cat Coding</title>
-			</head>
-			<body>
-			<p> Hello world! </p>
-			</body>
-			</html>`;
-	}
+	// Register the Export to HTML feature
+	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.exportHtml', () => {
+		exportHtml.exportToHtml(context.extensionPath);
+	}));
+
+  return;
 }
 
-export function poop(x : number, y : number) : number {
-	return x + y + 1;
+export function poop(x: number, y: number): number {
+  return x + y + 1;
 }

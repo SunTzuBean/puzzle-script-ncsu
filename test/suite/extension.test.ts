@@ -5,13 +5,19 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 // import * as myExtension from '../../extension';
 import * as myExtension from "../../src/extension";
+import * as mocha from 'mocha';
 
-suite('Extension Tests', () => {
+mocha.suite('Extension Tests', () => {
 	vscode.window.showInformationMessage('Start all tests.');
+	mocha.describe('Test Extension Load', function () {
+		mocha.it("Extension should not crash", function (done) {
+			vscode.commands.executeCommand("puzzlescript.helloWorld").then(done);
+		});
+	});
 
+	// Tests code coverage functionality
 	test('Sample test', () => {
-		myExtension.poop(1, 2);
-		vscode.commands.executeCommand("puzzlescript.helloWorld");
+		myExtension.poop(2, 2);
 		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
 		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
 	});

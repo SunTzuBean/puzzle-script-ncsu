@@ -1,0 +1,28 @@
+{
+  "html": {
+    "snippets": {
+      "puzzlescript": "{title\nauthor\nhomepage\n\n=======\nOBJECTS\n=======\n\n======\nLEGEND\n======\n\n======\nSOUNDS\n======\n\n===============\nCOLLISIONLAYERS\n===============\n\n=====\nRULES\n=====\n\n=============\nWINCONDITIONS\n=============\n\n======\nLEVELS\n======}",
+      "oll": "<ol><li id=${1} class=${2}> Will only work in html </ol>",
+      "ran": "{ Wrap plain text in curly braces }"
+    },
+
+    "abbreviations": {
+      "puzzlescript": "{title\nauthor\nhomepage\n\n=======\nOBJECTS\n=======\n\n======\nLEGEND\n======\n\n======\nSOUNDS\n======\n\n===============\nCOLLISIONLAYERS\n===============\n\n=====\nRULES\n=====\n\n=============\nWINCONDITIONS\n=============\n\n======\nLEVELS\n======}"
+    }
+
+  },
+
+  "pzls": {
+    "snippets": {
+      "puzzlescript": "{title\nauthor\nhomepage\n\n=======\nOBJECTS\n=======\n\n======\nLEGEND\n======\n\n======\nSOUNDS\n======\n\n===============\nCOLLISIONLAYERS\n===============\n\n=====\nRULES\n=====\n\n=============\nWINCONDITIONS\n=============\n\n======\nLEVELS\n======}"
+    }
+  },
+
+   "css": {
+      "snippets": {
+      "cb": "color: black",
+      "bsd": "border: 1px solid ${1:red}",
+      "ls": "list-style: ${1}"
+    }
+  }
+}

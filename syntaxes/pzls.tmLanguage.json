@@ -1,0 +1,229 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "PuzzleScript",
+  "patterns": [
+    {
+      "include": "#classes"
+    },
+    {
+      "include": "#variables"
+    },
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#colors"
+    }
+  ],
+  "repository": {
+    "classes": {
+      "patterns": [
+        {
+          "name": "support.class.objects",
+          "match": "(?i)objects"
+        },
+        {
+          "name": "support.class.collisionlayers",
+          "match": "(?i)collisionlayers"
+        },
+        {
+          "name": "support.class.legend",
+          "match": "(?i)legend"
+        },
+        {
+          "name": "support.class.sounds",
+          "match": "(?i)sounds"
+        },
+        {
+          "name": "support.class.rules",
+          "match": "(?i)rules"
+        },
+        {
+          "name": "support.class.winconditions",
+          "match": "(?i)winconditions"
+        },
+        {
+          "name": "support.class.levels",
+          "match": "(?i)levels"
+        }
+      ]
+    },
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.block",
+          "begin": "\\(",
+          "end": "\\)"
+        }
+      ]
+    },
+    "colors": {
+      "patterns": [
+        {
+          "name": "keyword.control.black",
+          "match": "(?i)black",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.white",
+          "match": "(?i)white",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.grey",
+          "match": "(?i)(grey|gray)",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.lightgrey",
+          "match": "(?i)(lightgrey|lightgray)",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.darkgrey",
+          "match": "(?i)(darkgrey|darkgray)",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.red",
+          "match": "(?i)red",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.darkred",
+          "match": "(?i)darkred",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.lightred",
+          "match": "(?i)lightred",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.brown",
+          "match": "(?i)brown",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.darkbrown",
+          "match": "(?i)darkbrown",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.lightbrown",
+          "match": "(?i)lightbrown",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.orange",
+          "match": "(?i)orange",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.yellow",
+          "match": "(?i)yellow",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.green",
+          "match": "(?i)green",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.darkgreen",
+          "match": "(?i)darkgreen",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.lightgreen",
+          "match": "(?i)lightgreen",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.blue",
+          "match": "(?i)blue",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.lightblue",
+          "match": "(?i)lightblue",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.darkblue",
+          "match": "(?i)black",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.purple",
+          "match": "(?i)purple",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.pink",
+          "match": "(?i)pink",
+          "settings": {
+            "foreground": "#000000"
+          }
+        },
+        {
+          "name": "keyword.control.equals",
+          "match": "=",
+          "settings": {
+            "foreground": "#000000"
+          }
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "comment": "selection by exlcusion",
+          "name": "storage.type",
+          "match": "(?i)^(?!([0-9]+|#|black|white|grey|darkgrey|lightgrey|gray|darkgray|lightgray|red|darkred|lightred|brown|darkbrown|lightbrown|orange|yellow|green|darkgreen|lightgreen|blue|lightblue|darkblue|purple|pink|title|author|homepage|.*\\..*|=)).*$"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.pzls"
+}
