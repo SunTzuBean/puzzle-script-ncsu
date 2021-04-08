@@ -238,6 +238,7 @@ a {
 <script src="__LOADDIR__/PuzzleScript/src/js/compiler.js"></script>
 <script src="__LOADDIR__/PuzzleScript/src/js/inputoutput.js"></script>
 <script src="__LOADDIR__/PuzzleScript/src/js/mobile.js"></script>
+<script src="__LOADDIR__/PuzzleScript/src/js/soundbar.js"></script>
 
 <script>
   const vscode = acquireVsCodeApi();
@@ -289,8 +290,16 @@ a {
   }
   window.addEventListener('message', handleMessageEvent);
   vscode.postMessage({command: "afterInitialization"});
+
 </script>
-<button type="button" onclick="playSound(7)">poopiepoo</button>
+
+<!-- sound editor expects that parent.frame exists. -->
+<button type="button" onclick="newSound(1)">poopiepoo</button>
+
+<script>
+  parent = {};
+  parent.frames = [0, 0, 0, 0, 0];
+</script>
 
 </body>
 </html>
