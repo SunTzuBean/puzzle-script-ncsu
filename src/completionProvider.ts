@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 
 let colors = ['Orange', 'Blue', 'Black', 'Green', 'Yellow', 'Red', 'Brown'];
 let sections = ['OBJECTS', 'LEGEND', 'SOUNDS', 'COLLISIONLAYERS', 'RULES', 'WINCONDITIONS', 'LEVELS'];
-let header_keywords = ['author', 'again_interval', 'background_color', 'color_palette', 'debug', 'flickscreen', 'homepage', 'key_repeat_interval', 'noaction', 'norepeat_action', 'noundo', 'norestart', 'realtime_interval', 'require_player_movement', 'run_rules_on_level_start', 'scanline', 'text_color', 'title', 'throttle_movement', 'verbose_logging', 'zoomscreen']
+let headerKeywords = ['author', 'again_interval', 'background_color', 'color_palette', 'debug', 'flickscreen', 'homepage', 'key_repeat_interval', 'noaction', 'norepeat_action', 'noundo', 'norestart', 'realtime_interval', 'require_player_movement', 'run_rules_on_level_start', 'scanline', 'text_color', 'title', 'throttle_movement', 'verbose_logging', 'zoomscreen'];
 
 // custom implementation of CompletionItemProvider which generated intellisence completion items for puzzlescript files.
 export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItemProvider {
@@ -41,17 +41,17 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
         section : string,
         completionList : vscode.CompletionItem[]
     ) {
-        if(section != "HEADER") {
+        if(section !== "HEADER") {
             return;
         }
-        if(document.lineAt(position.line).text.indexOf(' ') == -1) {
-            for(let keyword of header_keywords) {
+        if(document.lineAt(position.line).text.indexOf(' ') === -1) {
+            for(let keyword of headerKeywords) {
                 const completionItem = new vscode.CompletionItem(keyword);
                 completionItem.kind = vscode.CompletionItemKind.Text;
                 completionList.push(completionItem);
             }
         }
-        if(document.lineAt(position.line).text.indexOf('background_color') != -1 || document.lineAt(position.line).text.indexOf('text_color') != -1){
+        if(document.lineAt(position.line).text.indexOf('background_color') !== -1 || document.lineAt(position.line).text.indexOf('text_color') !== -1){
             for(var i in colors) {
                 const completionItem = new vscode.CompletionItem(colors[i]);
                 completionItem.kind = vscode.CompletionItemKind.Value;
@@ -66,18 +66,18 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
         section : string,
         completionList : vscode.CompletionItem[]
     ) {
-        if(section == 'HEADER' || section == 'OBJECTS') {
+        if(section === 'HEADER' || section === 'OBJECTS') {
             return;
         }
         let text = document.getText();
         let start = text.indexOf('OBJECTS');
         let end = text.indexOf('LEGEND');
         text = text.substring(start, end);
-        let w = text.match('[a-zA-Z][a-zA-Z_0-9]*')
+        let w = text.match('[a-zA-Z][a-zA-Z_0-9]*');
         while(w) {
             let word = w.toString();
             text = text.substring(text.indexOf(word) + word.length);
-            if(colors.indexOf(word) == -1 && sections.indexOf(word) == -1) {
+            if(colors.indexOf(word) === -1 && sections.indexOf(word) === -1) {
                 const completionItem = new vscode.CompletionItem(word);
                 completionItem.kind = vscode.CompletionItemKind.Text;
                 completionList.push(completionItem);
@@ -93,7 +93,7 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
         section : string,
         completionList : vscode.CompletionItem[]
     ) {
-        if(section != 'OBJECTS' && section != "HEADER") {
+        if(section !== 'OBJECTS' && section !== "HEADER") {
            return;
         }
         if (position.line > 0) {
@@ -118,26 +118,26 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
         position : vscode.Position,
         completionList : vscode.CompletionItem[]
     ) {
-        let current_line = position.line - 1;
-        let current_header = -1;
-        while(current_line > 0 && current_header == -1) {
-            let line_text = document.lineAt(current_line).text;
+        let currentLine = position.line - 1;
+        let currentHeader = -1;
+        while(currentLine > 0 && currentHeader === -1) {
+            let lineText = document.lineAt(currentLine).text;
             for(let i = 0; i < sections.length; i++) {
-                if(line_text.indexOf(sections[i]) != -1) {
-                    current_header = i;
+                if(lineText.indexOf(sections[i]) !== -1) {
+                    currentHeader = i;
                     break;
                 }
             }
-            current_line--;
+            currentLine--;
         }
-        if(current_header < sections.length - 1) {
-            let suggested_header = sections[current_header + 1];
-            const completionItem = new vscode.CompletionItem(suggested_header);
+        if(currentHeader < sections.length - 1) {
+            let suggestedHeader = sections[currentHeader + 1];
+            const completionItem = new vscode.CompletionItem(suggestedHeader);
             completionItem.kind = vscode.CompletionItemKind.Value;
             completionList.push(completionItem);
         }
-        if(current_header != -1) {
-            return sections[current_header];
+        if(currentHeader !== -1) {
+            return sections[currentHeader];
         }
         return "HEADER";
     }
