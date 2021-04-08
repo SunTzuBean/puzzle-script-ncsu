@@ -34,4 +34,16 @@ suite('Extension Tests', () => {
             });
         })
     })
+
+    test("Suggest Objects", () => {
+        let dir = path.resolve("../../workspace/puzzlescript/test-files/ez.pzls");
+        vsc.workspace.openTextDocument(dir).then((doc) =>{
+            let position = new vsc.Position(54, 0);
+            let source = new vsc.CancellationTokenSource();
+            let token = source.token;
+            completionprovider.provideCompletionItems(doc, position, token).then((completionItems) => {
+                assert.strictEqual(6, completionItems.length);
+            });
+        })
+    })
 });
