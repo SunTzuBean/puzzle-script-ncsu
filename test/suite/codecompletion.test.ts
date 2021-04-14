@@ -12,7 +12,8 @@ suite('Extension Tests', () => {
     let completionprovider = new PuzzleScriptCompletionItemProvider();
     
     test('Suggest Headers', () => {
-        let dir = path.resolve("../../workspace/puzzlescript/test-files/codeCompletion/empty.pzls");
+        let dir = path.resolve("./test-files/codeCompletion/empty.pzls");
+        console.log("dir is: ", dir);
         vsc.workspace.openTextDocument(dir).then((doc) => {
             let position = new vsc.Position(1, 0);
             let source = new vsc.CancellationTokenSource();
@@ -24,7 +25,7 @@ suite('Extension Tests', () => {
     });
 
     test("Suggest Colors", () => {
-        let dir = path.resolve("../../workspace/puzzlescript/test-files/ez.pzls");
+        let dir = path.resolve("./test-files/ez.pzls");
         vsc.workspace.openTextDocument(dir).then((doc) =>{
             let position = new vsc.Position(9,0);
             let source = new vsc.CancellationTokenSource();
@@ -43,7 +44,7 @@ suite('Extension Tests', () => {
     })
 
     test("Suggest Objects", () => {
-        let dir = path.resolve("../../workspace/puzzlescript/test-files/ez.pzls");
+        let dir = path.resolve("./test-files/ez.pzls");
         vsc.workspace.openTextDocument(dir).then((doc) =>{
             let position = new vsc.Position(54, 0);
             let source = new vsc.CancellationTokenSource();
