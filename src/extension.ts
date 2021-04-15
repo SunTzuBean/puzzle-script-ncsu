@@ -11,6 +11,74 @@ import { PuzzleScriptCompletionItemProvider } from "./completionProvider";
 
 let fs = require("fs");
 
+const tokenTypes = ['coloredGrey', 'coloredDarkBlue'];
+const tokenModifiers = ['color'];
+const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
+
+class OurSemanticTokenProvider implements vscode.DocumentSemanticTokensProvider {
+	sections = ['objects', 'legend', 'sounds', 'collisionlayers', 'rules', 'winconditions', 'levels'];
+
+	onDidChangeSemanticTokens?: vscode.Event<void> | undefined;
+	provideDocumentSemanticTokens(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.ProviderResult<vscode.SemanticTokens> {
+		// console.log("Document text is: ", document.getText());
+		let doctext = document.getText();
+		let objectsStart = -1;
+		// Find line # of OBJECTS
+		{
+			let lowercaseLines = doctext.toLowerCase().split("\n");
+			objectsStart = lowercaseLines.indexOf("objects");
+		}
+		console.log("Objects line number is: ", objectsStart);
+		let objectsEnds = -1;
+		// Find line # that objects ends
+		{
+			let lowercaseLines = doctext.toLowerCase().split("\n");
+			let objectFree = this.sections.filter((x) => x !== "OBJECTS");
+			let sectionLines = this.sections.map((sectionName) => lowercaseLines.indexOf(sectionName))
+															 					.filter((line) => line > objectsStart);
+			if (sectionLines.length > 0) {
+				objectsEnds = sectionLines.reduceRight((x, y) => x < y ? x : y, Infinity);
+			} else {
+				if (objectsStart > -1) {
+					objectsEnds = lowercaseLines.length;
+				}
+			}
+			console.log("Objects ends is: ", objectsEnds);
+		}
+
+		// Find each bunch of objects
+		{
+			let lines = doctext.split("\n");
+			var i = objectsStart + 1;
+			for (var i = objectsStart + 1; i < objectsEnds; i++) {
+				if (lines[i].length === 0) {
+					continue;
+				}
+				if (lines[i].substr(0) === "=") {
+					continue;
+				}
+				if (lines[i].match(/\$?[a-zA-Z_]+/)) {
+					// TODO parse and index color list
+					// TODO replace comments with whitespace
+					// TODO build out color semantic token list
+					// TODO build these into tokens, build mappings from tokens to colors
+					console.log("found identifier: ", lines[i]);
+					console.log("color list on: ", lines[i + 1]);
+					i += 2;
+					console.log("entering while, i is uh: " + i);
+					while (i < lines.length && lines[i].match(/[.0-9]+/)) {
+						console.log("grid: " + lines[i]);
+						i += 1;
+					}
+					console.log("leaving while, i is: " + i);
+				}
+			}
+		}
+		const tokensBuilder = new vscode.SemanticTokensBuilder(legend);
+		return tokensBuilder.build();
+	}
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -103,6 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
 		Promise.all([exportHtml.exportToHtml(context.extensionPath)]);
 	}));
 
+	vscode.languages.registerDocumentSemanticTokensProvider(sel, new OurSemanticTokenProvider(), legend);
   return;
 }
 
