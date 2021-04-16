@@ -14,14 +14,12 @@ export async function exportToHtml(extensionPath: string) {
     return; // No open editor
   }
 
-  // Get the open workspace folder and just return if it doesn't exist
-  let opendirs = workspace.workspaceFolders;
-  if (!opendirs) {
-    return;
-  }
+  // Get the uri of the active document
+  let activeUri = editor.document.uri;
 
+  // Get the intended export path/filename from the user
   var savedir: vscode.Uri = vscode.Uri.file(
-    path.join(opendirs[0].uri.path, await _askForPath())
+    path.join(path.dirname(activeUri.path), await _askForPath())
   );
 
   // Get the source code as a string
@@ -45,12 +43,10 @@ export async function exportToHtml(extensionPath: string) {
   var matches = /title (.*?)\\r\\n/g.exec(sourceCode);
   if (matches) {
     title = matches[1];
-    console.log("TITLE: " + title);
   }
   matches = /homepage (.*?)\\r\\n/g.exec(sourceCode);
   if (matches) {
     homepage = matches[1];
-    console.log("HOMEPAGE: " + homepage);
   }
 
   sourceCode = sourceCode.split("\\r").join("");
