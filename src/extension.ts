@@ -12,6 +12,47 @@ import { PuzzleScriptCompletionItemProvider } from "./completionProvider";
 
 let fs = require("fs");
 
+const availableDecorators : Record<string, vscode.TextEditorDecorationType> = {};
+
+for (const color of decorate.availableColors) {
+	availableDecorators[color] = vscode.window.createTextEditorDecorationType({
+		cursor: 'crosshair',
+		backgroundColor: {id: 'puzzlescript.' + color},
+		opacity: '0.25',
+	});
+}
+
+class DecorateGrid extends decorate.GridProcessor {
+    activeEditor : vscode.TextEditor;
+    decorations : undefined | Record<string, vscode.DecorationOptions[]>;
+
+    constructor (activeEditor : vscode.TextEditor) {
+        super();
+        this.activeEditor = activeEditor;
+    }
+
+    beforeProcess(): void {
+        this.decorations = decorate.initializeDecorations();
+    }
+    processGrid(color: string | undefined, line: number, col: number, lines: string[]): void {
+        if (this.decorations && color && this.decorations[color]) {
+            this.decorations[color].push({range: new vscode.Range(new vscode.Position(line, col), new vscode.Position(line, col + 1))});
+        }
+    }
+    afterProcess(): void {
+        for (const [colorname, decorator] of Object.entries(availableDecorators)) {
+            if (this.decorations) {
+                this.activeEditor.setDecorations(decorator, this.decorations[colorname]);
+            }
+        }
+    }
+    
+}
+
+function decorateText(doctext : string, activeEditor : vscode.TextEditor): void {
+    decorate.processText(doctext, new DecorateGrid(activeEditor));
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -107,7 +148,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Add text decorator for grid items
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		if (editor?.document.languageId === "puzzlescript") {
-			decorate.decorateText(editor.document.getText(), editor);
+			decorateText(editor.document.getText(), editor);
 		}
 	}, null, context.subscriptions);
 
@@ -115,7 +156,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (event.document.languageId === "puzzlescript") {
 			let activeEditor = vscode.window.activeTextEditor;
 			if (activeEditor) {
-				decorate.decorateText(event.document.getText(), activeEditor);
+				decorateText(event.document.getText(), activeEditor);
 			}
 
 		}

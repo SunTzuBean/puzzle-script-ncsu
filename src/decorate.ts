@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-const availableColors : string[] = [
+export const availableColors : string[] = [
 	"black",
 	"white",
 	"grey",
@@ -31,17 +31,6 @@ const colorMap : Record<string, string> = {};
 for (const color of availableColors) {
     colorMap[color] = color;
 }
-
-let availableDecorators : Record<string, vscode.TextEditorDecorationType> = {};
-
-for (const color of availableColors) {
-	availableDecorators[color] = vscode.window.createTextEditorDecorationType({
-		cursor: 'crosshair',
-		backgroundColor: {id: 'puzzlescript.' + color},
-		opacity: '0.25',
-	});
-}
-
 
 const sections = ['objects', 'legend', 'sounds', 'collisionlayers', 'rules', 'winconditions', 'levels'];
 
@@ -119,33 +108,3 @@ export function processText(doctext : string, grid : GridProcessor){
 	}
 }
 
-class DecorateGrid extends GridProcessor {
-    activeEditor : vscode.TextEditor;
-    decorations : undefined | Record<string, vscode.DecorationOptions[]>;
-
-    constructor (activeEditor : vscode.TextEditor) {
-        super();
-        this.activeEditor = activeEditor;
-    }
-
-    beforeProcess(): void {
-        this.decorations = initializeDecorations();
-    }
-    processGrid(color: string | undefined, line: number, col: number, lines: string[]): void {
-        if (this.decorations && color && this.decorations[color]) {
-            this.decorations[color].push({range: new vscode.Range(new vscode.Position(line, col), new vscode.Position(line, col + 1))});
-        }
-    }
-    afterProcess(): void {
-        for (const [colorname, decorator] of Object.entries(availableDecorators)) {
-            if (this.decorations) {
-                this.activeEditor.setDecorations(decorator, this.decorations[colorname]);
-            }
-        }
-    }
-    
-}
-
-export function decorateText(doctext : string, activeEditor : vscode.TextEditor): void {
-    processText(doctext, new DecorateGrid(activeEditor));
-}
