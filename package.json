@@ -21,6 +21,11 @@
         "onWebviewPanel:levelEditor",
         "onLanguage:puzzlescript"
     ],
+    "configurationDefaults": {
+        "[languageId]": {
+            "editor.semanticHighlighting.enabled": true
+        }
+    },
     "main": "./out/src/extension.js",
     "contributes": {
         "languages": [
@@ -114,7 +119,225 @@
                     "group": "1_run"
                 }
             ]
-        }
+        },
+        "colors": [
+            {
+                "id": "puzzlescript.black",
+                "description": "black color",
+                "defaults": {
+                    "dark": "#000000",
+                    "light": "#000000",
+                    "highContrast": "#000000"
+                }
+            },
+            {
+                "id": "puzzlescript.white",
+                "description": "white color",
+                "defaults": {
+                    "dark": "#FFFFFF",
+                    "light": "#FFFFFF",
+                    "highContrast": "#FFFFFF"
+                }
+            },
+            {
+                "id": "puzzlescript.grey",
+                "description": "grey color",
+                "defaults": {
+                    "dark": "#555555",
+                    "light": "#555555",
+                    "highContrast": "#555555"
+                }
+            },
+            {
+                "id": "puzzlescript.darkgrey",
+                "description": "darkgrey color",
+                "defaults": {
+                    "dark": "#555500",
+                    "light": "#555500",
+                    "highContrast": "#555500"
+                }
+            },
+            {
+                "id": "puzzlescript.lightgrey",
+                "description": "lightgrey color",
+                "defaults": {
+                    "dark": "#AAAAAA",
+                    "light": "#AAAAAA",
+                    "highContrast": "#AAAAAA"
+                }
+            },
+            {
+                "id": "puzzlescript.gray",
+                "description": "gray color",
+                "defaults": {
+                    "dark": "#555555",
+                    "light": "#555555",
+                    "highContrast": "#555555"
+                }
+            },
+            {
+                "id": "puzzlescript.darkgray",
+                "description": "darkgray color",
+                "defaults": {
+                    "dark": "#555500",
+                    "light": "#555500",
+                    "highContrast": "#555500"
+                }
+            },
+            {
+                "id": "puzzlescript.lightgray",
+                "description": "lightgray color",
+                "defaults": {
+                    "dark": "#AAAAAA",
+                    "light": "#AAAAAA",
+                    "highContrast": "#AAAAAA"
+                }
+            },
+            {
+                "id": "puzzlescript.red",
+                "description": "red color",
+                "defaults": {
+                    "dark": "#FF0000",
+                    "light": "#FF0000",
+                    "highContrast": "#FF0000"
+                }
+            },
+            {
+                "id": "puzzlescript.darkred",
+                "description": "darkred color",
+                "defaults": {
+                    "dark": "#AA0000",
+                    "light": "#AA0000",
+                    "highContrast": "#AA0000"
+                }
+            },
+            {
+                "id": "puzzlescript.lightred",
+                "description": "lightred color",
+                "defaults": {
+                    "dark": "#FF5555",
+                    "light": "#FF5555",
+                    "highContrast": "#FF5555"
+                }
+            },
+            {
+                "id": "puzzlescript.brown",
+                "description": "brown color",
+                "defaults": {
+                    "dark": "#AA5500",
+                    "light": "#AA5500",
+                    "highContrast": "#AA5500"
+                }
+            },
+            {
+                "id": "puzzlescript.darkbrown",
+                "description": "darkbrown color",
+                "defaults": {
+                    "dark": "#550000",
+                    "light": "#550000",
+                    "highContrast": "#550000"
+                }
+            },
+            {
+                "id": "puzzlescript.lightbrown",
+                "description": "lightbrown color",
+                "defaults": {
+                    "dark": "#FFAA00",
+                    "light": "#FFAA00",
+                    "highContrast": "#FFAA00"
+                }
+            },
+            {
+                "id": "puzzlescript.orange",
+                "description": "orange color",
+                "defaults": {
+                    "dark": "#FF5500",
+                    "light": "#FF5500",
+                    "highContrast": "#FF5500"
+                }
+            },
+            {
+                "id": "puzzlescript.yellow",
+                "description": "yellow color",
+                "defaults": {
+                    "dark": "#FFFF55",
+                    "light": "#FFFF55",
+                    "highContrast": "#FFFF55"
+                }
+            },
+            {
+                "id": "puzzlescript.green",
+                "description": "green color",
+                "defaults": {
+                    "dark": "#55AA00",
+                    "light": "#55AA00",
+                    "highContrast": "#55AA00"
+                }
+            },
+            {
+                "id": "puzzlescript.darkgreen",
+                "description": "darkgreen color",
+                "defaults": {
+                    "dark": "#005500",
+                    "light": "#005500",
+                    "highContrast": "#005500"
+                }
+            },
+            {
+                "id": "puzzlescript.lightgreen",
+                "description": "lightgreen color",
+                "defaults": {
+                    "dark": "#AAFF00",
+                    "light": "#AAFF00",
+                    "highContrast": "#AAFF00"
+                }
+            },
+            {
+                "id": "puzzlescript.blue",
+                "description": "blue color",
+                "defaults": {
+                    "dark": "#5555AA",
+                    "light": "#5555AA",
+                    "highContrast": "#5555AA"
+                }
+            },
+            {
+                "id": "puzzlescript.lightblue",
+                "description": "lightblue color",
+                "defaults": {
+                    "dark": "#AAFFFF",
+                    "light": "#AAFFFF",
+                    "highContrast": "#AAFFFF"
+                }
+            },
+            {
+                "id": "puzzlescript.darkblue",
+                "description": "darkblue color",
+                "defaults": {
+                    "dark": "#000055",
+                    "light": "#000055",
+                    "highContrast": "#000055"
+                }
+            },
+            {
+                "id": "puzzlescript.purple",
+                "description": "purple color",
+                "defaults": {
+                    "dark": "#550055",
+                    "light": "#550055",
+                    "highContrast": "#550055"
+                }
+            },
+            {
+                "id": "puzzlescript.pink",
+                "description": "pink color",
+                "defaults": {
+                    "dark": "#FFAAFF",
+                    "light": "#FFAAFF",
+                    "highContrast": "#FFAAFF"
+                }
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
