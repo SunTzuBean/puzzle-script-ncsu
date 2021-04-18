@@ -107,7 +107,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Add text decorator for grid items
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		if (editor?.document.languageId === "puzzlescript") {
-			decorate.decorateText(editor.document, editor);
+			decorate.decorateText(editor.document.getText(), editor);
 		}
 	}, null, context.subscriptions);
 
@@ -115,7 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (event.document.languageId === "puzzlescript") {
 			let activeEditor = vscode.window.activeTextEditor;
 			if (activeEditor) {
-				decorate.decorateText(event.document, activeEditor);
+				decorate.decorateText(event.document.getText(), activeEditor);
 			}
 
 		}
