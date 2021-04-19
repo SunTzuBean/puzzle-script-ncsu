@@ -102,9 +102,7 @@ export function processText(doctext : string, grid : GridProcessor){
 				colorProcess:
 				while (true) {
 					let match = wordRe.exec(lines[i + 1]);
-					console.log("got match: ", match);
 					if (match) {
-						console.log("Processing match!");
 						assert.strictEqual(match.length, 1);
 						assert.notStrictEqual(match[0], "");
 						let color = match[0].toLowerCase();
@@ -113,7 +111,6 @@ export function processText(doctext : string, grid : GridProcessor){
 							colors.push(color);
 						}
 					} else {
-						console.log("Breaking!");
 						break colorProcess;
 					}
 				}

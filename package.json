@@ -144,7 +144,7 @@
                 "description": "grey color",
                 "defaults": {
                     "dark": "#555555",
-                    "light": "#555555",
+                    "light": "#BBBBBB",
                     "highContrast": "#555555"
                 }
             },
@@ -153,7 +153,7 @@
                 "description": "darkgrey color",
                 "defaults": {
                     "dark": "#555500",
-                    "light": "#555500",
+                    "light": "#333333",
                     "highContrast": "#555500"
                 }
             },
@@ -162,7 +162,7 @@
                 "description": "lightgrey color",
                 "defaults": {
                     "dark": "#AAAAAA",
-                    "light": "#AAAAAA",
+                    "light": "#FFEEDD",
                     "highContrast": "#AAAAAA"
                 }
             },
@@ -171,7 +171,7 @@
                 "description": "gray color",
                 "defaults": {
                     "dark": "#555555",
-                    "light": "#555555",
+                    "light": "#BBBBBB",
                     "highContrast": "#555555"
                 }
             },
@@ -180,7 +180,7 @@
                 "description": "darkgray color",
                 "defaults": {
                     "dark": "#555500",
-                    "light": "#555500",
+                    "light": "#333333",
                     "highContrast": "#555500"
                 }
             },
@@ -189,7 +189,7 @@
                 "description": "lightgray color",
                 "defaults": {
                     "dark": "#AAAAAA",
-                    "light": "#AAAAAA",
+                    "light": "#FFEEDD",
                     "highContrast": "#AAAAAA"
                 }
             },
@@ -198,7 +198,7 @@
                 "description": "red color",
                 "defaults": {
                     "dark": "#FF0000",
-                    "light": "#FF0000",
+                    "light": "#DD1111",
                     "highContrast": "#FF0000"
                 }
             },
@@ -207,7 +207,7 @@
                 "description": "darkred color",
                 "defaults": {
                     "dark": "#AA0000",
-                    "light": "#AA0000",
+                    "light": "#990000",
                     "highContrast": "#AA0000"
                 }
             },
@@ -216,7 +216,7 @@
                 "description": "lightred color",
                 "defaults": {
                     "dark": "#FF5555",
-                    "light": "#FF5555",
+                    "light": "#FF4422",
                     "highContrast": "#FF5555"
                 }
             },
@@ -225,7 +225,7 @@
                 "description": "brown color",
                 "defaults": {
                     "dark": "#AA5500",
-                    "light": "#AA5500",
+                    "light": "#663311",
                     "highContrast": "#AA5500"
                 }
             },
@@ -234,7 +234,7 @@
                 "description": "darkbrown color",
                 "defaults": {
                     "dark": "#550000",
-                    "light": "#550000",
+                    "light": "#331100",
                     "highContrast": "#550000"
                 }
             },
@@ -243,7 +243,7 @@
                 "description": "lightbrown color",
                 "defaults": {
                     "dark": "#FFAA00",
-                    "light": "#FFAA00",
+                    "light": "#AA6644",
                     "highContrast": "#FFAA00"
                 }
             },
@@ -252,7 +252,7 @@
                 "description": "orange color",
                 "defaults": {
                     "dark": "#FF5500",
-                    "light": "#FF5500",
+                    "light": "#FF6644",
                     "highContrast": "#FF5500"
                 }
             },
@@ -261,7 +261,7 @@
                 "description": "yellow color",
                 "defaults": {
                     "dark": "#FFFF55",
-                    "light": "#FFFF55",
+                    "light": "#FFDD66",
                     "highContrast": "#FFFF55"
                 }
             },
@@ -270,7 +270,7 @@
                 "description": "green color",
                 "defaults": {
                     "dark": "#55AA00",
-                    "light": "#55AA00",
+                    "light": "#448811",
                     "highContrast": "#55AA00"
                 }
             },
@@ -279,7 +279,7 @@
                 "description": "darkgreen color",
                 "defaults": {
                     "dark": "#005500",
-                    "light": "#005500",
+                    "light": "#335500",
                     "highContrast": "#005500"
                 }
             },
@@ -288,7 +288,7 @@
                 "description": "lightgreen color",
                 "defaults": {
                     "dark": "#AAFF00",
-                    "light": "#AAFF00",
+                    "light": "#88BB77",
                     "highContrast": "#AAFF00"
                 }
             },
@@ -297,7 +297,7 @@
                 "description": "blue color",
                 "defaults": {
                     "dark": "#5555AA",
-                    "light": "#5555AA",
+                    "light": "#8899DD",
                     "highContrast": "#5555AA"
                 }
             },
@@ -306,7 +306,7 @@
                 "description": "lightblue color",
                 "defaults": {
                     "dark": "#AAFFFF",
-                    "light": "#AAFFFF",
+                    "light": "#BBDDEE",
                     "highContrast": "#AAFFFF"
                 }
             },
@@ -315,7 +315,7 @@
                 "description": "darkblue color",
                 "defaults": {
                     "dark": "#000055",
-                    "light": "#000055",
+                    "light": "#666688",
                     "highContrast": "#000055"
                 }
             },
@@ -324,7 +324,7 @@
                 "description": "purple color",
                 "defaults": {
                     "dark": "#550055",
-                    "light": "#550055",
+                    "light": "#665555",
                     "highContrast": "#550055"
                 }
             },
@@ -333,7 +333,7 @@
                 "description": "pink color",
                 "defaults": {
                     "dark": "#FFAAFF",
-                    "light": "#FFAAFF",
+                    "light": "#997788",
                     "highContrast": "#FFAAFF"
                 }
             }
