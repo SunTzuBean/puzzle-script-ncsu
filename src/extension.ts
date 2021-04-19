@@ -23,6 +23,7 @@ for (const color of decorate.availableColors) {
 }
 
 class DecorateGrid extends decorate.GridProcessor {
+
     activeEditor : vscode.TextEditor;
     decorations : undefined | Record<string, vscode.DecorationOptions[]>;
 
@@ -31,11 +32,17 @@ class DecorateGrid extends decorate.GridProcessor {
         this.activeEditor = activeEditor;
     }
 
+	processColor(color: string, line: number, colStart: number, colEnd: number): void {
+		if (this.decorations && this.decorations[color]) {
+            this.decorations[color].push({range: new vscode.Range(new vscode.Position(line, colStart), new vscode.Position(line, colEnd))});
+        }
+	}
+
     beforeProcess(): void {
         this.decorations = decorate.initializeDecorations();
     }
-    processGrid(color: string | undefined, line: number, col: number, lines: string[]): void {
-        if (this.decorations && color && this.decorations[color]) {
+    processGrid(color: string, line: number, col: number, lines: string[]): void {
+        if (this.decorations && this.decorations[color]) {
             this.decorations[color].push({range: new vscode.Range(new vscode.Position(line, col), new vscode.Position(line, col + 1))});
         }
     }

@@ -1,3 +1,4 @@
+import * as assert from "assert";
 import * as vscode from "vscode";
 
 export const availableColors : string[] = [
@@ -47,9 +48,9 @@ export function findObjectsEnds(doctext : string, objectsStart : number) : numbe
 	// Find line # that objects ends
 	
 	let lowercaseLines = doctext.toLowerCase().split("\n");
-	let objectFree = sections.filter((x) => x !== "OBJECTS");
-	let sectionLines = sections.map((sectionName) => lowercaseLines.indexOf(sectionName))
-	        													   .filter((line) => line > objectsStart);
+	let objectFree = sections.filter((x) => x !== "objects");
+	let sectionLines = objectFree.map((sectionName) => lowercaseLines.indexOf(sectionName))
+	        													     .filter((line) => line > objectsStart);
 	if (sectionLines.length > 0) {
 		objectsEnds = sectionLines.reduceRight((x, y) => x < y ? x : y, Infinity);
 	} else {
@@ -70,13 +71,15 @@ export function initializeDecorations() : Record<string, Array<vscode.Decoration
 
 export abstract class GridProcessor {
     abstract beforeProcess() : void;
-    abstract processGrid(colors : string | undefined, line : number, col : number, lines : string[]) : void;
+	abstract processColor(color : string, line : number, colStart : number, colEnd : number) : void;
+    abstract processGrid(colors : string, line : number, col : number, lines : string[]) : void;
     abstract afterProcess() : void;
 }
 
 export function processText(doctext : string, grid : GridProcessor){
     const objectsStart = findObjectsStart(doctext);
 	if (objectsStart === -1) {
+		grid.afterProcess();
 		return;
 	}
     const objectsEnds = findObjectsEnds(doctext, objectsStart);
@@ -87,11 +90,33 @@ export function processText(doctext : string, grid : GridProcessor){
 			if (lines[i].length === 0) {
 				continue;
 			}
-			if (lines[i].substr(0) === "=") {
+			if (lines[i].charAt(0) === "=") {
 				continue;
 			}
-			if (lines[i].match(/\$?[a-zA-Z_]+/)) {
-				let colors = lines[i + 1].split(" ").map((s) => s.toLowerCase()).filter((s) => colorMap[s]);
+			if (lines[i].match(/^\$?[a-zA-Z_]+$/)) {
+				if (i + 1 >= lines.length) {
+					continue;
+				}
+				let colors = [];
+				const wordRe = /\w+/g;
+				colorProcess:
+				while (true) {
+					let match = wordRe.exec(lines[i + 1]);
+					console.log("got match: ", match);
+					if (match) {
+						console.log("Processing match!");
+						assert.strictEqual(match.length, 1);
+						assert.notStrictEqual(match[0], "");
+						let color = match[0].toLowerCase();
+						if (colorMap[color]) {
+							grid.processColor(color, i + 1, match.index, match.index + match[0].length);
+							colors.push(color);
+						}
+					} else {
+						console.log("Breaking!");
+						break colorProcess;
+					}
+				}
 				i += 2;
 				while (i < lines.length && lines[i].match(/[.0-9]+/)) {
 					for (let j = 0; j < lines[i].length; j++) {
