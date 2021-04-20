@@ -18,6 +18,7 @@ for (const color of decorate.availableColors) {
 	availableDecorators[color] = vscode.window.createTextEditorDecorationType({
 		cursor: 'crosshair',
 		backgroundColor: {id: 'puzzlescript.' + color},
+		color: "#000000",
 		opacity: '0.25',
 	});
 }
