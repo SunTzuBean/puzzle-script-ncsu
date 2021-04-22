@@ -1,3 +1,3 @@
 [submodule "PuzzleScript"]
 	path = media/PuzzleScript
-	url = git@github.com:increpare/PuzzleScript.git
+        url = https://github.ncsu.edu/ixdoming/PuzzleScript.net.git
