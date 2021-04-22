@@ -154,6 +154,12 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	// Add text decorator for grid items
+	console.log("voila voila");
+	for (const editor of vscode.window.visibleTextEditors) {
+		if (editor.document.languageId === "puzzlescript") {
+			decorateText(editor.document.getText(), editor);
+		}
+	}
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		if (editor?.document.languageId === "puzzlescript") {
 			decorateText(editor.document.getText(), editor);
