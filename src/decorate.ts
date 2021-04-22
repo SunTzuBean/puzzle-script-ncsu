@@ -93,7 +93,7 @@ export function processText(doctext : string, grid : GridProcessor){
 			if (lines[i].charAt(0) === "=") {
 				continue;
 			}
-			if (lines[i].match(/^\$?[a-zA-Z_]+( \$?[a-zA-Z_.])?$/)) {
+			if (lines[i].match(/^\$?[a-zA-Z_][0-9a-zA-Z_]+( \$?[a-zA-Z_.#])?$/)) {
 				if (i + 1 >= lines.length) {
 					continue;
 				}
