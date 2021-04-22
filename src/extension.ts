@@ -61,6 +61,23 @@ function decorateText(doctext : string, activeEditor : vscode.TextEditor): void 
     decorate.processText(doctext, new DecorateGrid(activeEditor));
 }
 
+function activeText() : string {
+	if (vscode.window.activeTextEditor) {
+		let doc = vscode.window.activeTextEditor.document;
+		if (doc.languageId === "puzzlescript") {
+			return doc.getText();
+		}
+	}
+	for (const editor of vscode.window.visibleTextEditors) {
+		let doc = editor.document;
+		if (doc.languageId === "puzzlescript") {
+			return doc.getText();
+		}
+	}
+	vscode.window.showErrorMessage("No editor containing puzzlescript code selected.");
+	return "";
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -105,12 +122,12 @@ export function activate(context: vscode.ExtensionContext) {
 	let gp = gamePreview.getGamePreviewPanel(context.extensionPath, pzConsole);
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.gamePreview', () => {
-		gp.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
+		gp.setGameData(activeText());
 		gp.createOrShow(context.extensionUri);
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleGamePreview', () => {
-		gp.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
+		gp.setGameData(activeText());
 		gp.createOrShow(context.extensionUri);
 	}));
 
@@ -128,12 +145,12 @@ export function activate(context: vscode.ExtensionContext) {
 	let le = levelEditor.getLevelEditor(context.extensionPath, pzConsole);
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.levelEditor', () => {
-		le.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
+		le.setGameData(activeText());
 		le.createOrShow(context.extensionUri);
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.toggleLevelEditor', () => {
-		le.setGameData(vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "");
+		le.setGameData(activeText());
 		le.createOrShow(context.extensionUri);
 	}));
 
