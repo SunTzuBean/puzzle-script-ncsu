@@ -104,14 +104,13 @@ export function processText(doctext : string, grid : GridProcessor){
 				while (true) {
 					let match = wordRe.exec(lines[i + 1]);
 					if (match) {
-						console.log("Match is: ", match);
 						assert.strictEqual(match.length, 1);
 						assert.notStrictEqual(match[0], "");
 						let color = match[0].toLowerCase();
 						if (colorMap[color]) {
 							grid.processColor(color, i + 1, match.index, match.index + match[0].length);
 							colors.push(color);
-						} else if (color.indexOf("#") === 0 && /^#([0-9]{6}|[0-9]{3})$/.exec(color) !== null) {
+						} else if (color.indexOf("#") === 0 && /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.exec(color) !== null) {
 							grid.processLiteralColor(color, i + 1, match.index, match.index + match[0].length);
 							colors.push(color);
 						}

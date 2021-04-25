@@ -42,12 +42,38 @@ class DecorateGrid extends decorate.GridProcessor {
     activeEditor : vscode.TextEditor;
     decorations : undefined | Record<string, vscode.DecorationOptions[]>;
 	decorationsTextColor : undefined | Record<string, vscode.DecorationOptions[]>;
+	literalDecorators : Record<string, vscode.TextEditorDecorationType> = {};
 	literalTextColorDecorators : Record<string, vscode.TextEditorDecorationType> = {};
+	literalDecorationsTextColor: Record<string, vscode.DecorationOptions[]> = {};
 
     constructor (activeEditor : vscode.TextEditor) {
         super();
         this.activeEditor = activeEditor;
     }
+
+	beforeProcess(): void {
+        this.decorations = decorate.initializeDecorations();
+		this.decorationsTextColor = decorate.initializeDecorations();
+    }
+
+	/**
+	 * Clean this decorator's own decorations.
+	 */
+	clean() {
+		this.literalDecorationsTextColor = {};
+		for (const [_, decorator] of Object.entries(this.literalTextColorDecorators)) {
+			this.activeEditor.setDecorations(decorator, []);
+		}
+		for (const [_, decorator] of Object.entries(this.literalDecorators)) {
+			this.activeEditor.setDecorations(decorator, []);
+		}
+		for (const [_, decorator] of Object.entries(availableDecorators)) {
+			this.activeEditor.setDecorations(decorator, []);
+		}
+		for (const [_, decorator] of Object.entries(availableTextColorDecorators)) {
+			this.activeEditor.setDecorations(decorator, []);
+		}
+	}
 
 	processColor(color: string, line: number, colStart: number, colEnd: number): void {
 		if (this.decorationsTextColor && this.decorationsTextColor[color]) {
@@ -58,21 +84,35 @@ class DecorateGrid extends decorate.GridProcessor {
 	processLiteralColor(color: string, line: number, colStart: number, colEnd: number): void {
 		if (!this.literalTextColorDecorators[color]) {
 			this.literalTextColorDecorators[color] = vscode.window.createTextEditorDecorationType({
-				backgroundColor: color,
+				before: {
+					contentText: ' ',
+					border: "0.1em solid",
+					borderColor: foreground,
+					margin: '0.1em 0.2em 0 0.2em',
+					width: '0.8em',
+					height: '0.8em',
+					backgroundColor: color
+				},
 				color: foreground,
-				opacity: '0.25'
 			});
 		}
-		if (this.decorationsTextColor && !this.decorationsTextColor[color]) {
-			this.decorationsTextColor[color] = [];
-			this.processColor(color, line, colStart, colEnd);
+		if (!this.literalDecorationsTextColor[color]) {
+			this.literalDecorationsTextColor[color] = [];
+		}
+		this.literalDecorationsTextColor[color].push({range: new vscode.Range(new vscode.Position(line, colStart), new vscode.Position(line, colEnd))});
+		
+		if (this.decorations && !this.decorations[color]) {
+			this.decorations[color] = [];
+		}
+		if (!this.literalDecorators[color]) {
+			this.literalDecorators[color] = vscode.window.createTextEditorDecorationType({
+				backgroundColor: color,
+				color: foreground,
+				opacity: '0.25',
+			});
 		}
 	}
 
-    beforeProcess(): void {
-        this.decorations = decorate.initializeDecorations();
-		this.decorationsTextColor = decorate.initializeDecorations();
-    }
     processGrid(color: string, line: number, col: number, lines: string[]): void {
         if (this.decorations && this.decorations[color]) {
             this.decorations[color].push({range: new vscode.Range(new vscode.Position(line, col), new vscode.Position(line, col + 1))});
@@ -84,17 +124,29 @@ class DecorateGrid extends decorate.GridProcessor {
                 this.activeEditor.setDecorations(decorator, this.decorations[colorname]);
             }
         }
+		for (const [colorname, decorator] of Object.entries(this.literalDecorators)) {
+			if (this.decorations && this.decorations[colorname]) {
+				this.activeEditor.setDecorations(decorator, this.decorations[colorname]);
+			}
+		}
 		for (const [colorname, decorator] of Object.entries(availableTextColorDecorators)) {
             if (this.decorationsTextColor) {
                 this.activeEditor.setDecorations(decorator, this.decorationsTextColor[colorname]);
+            }
+        }
+
+		for (const [colorname, decorator] of Object.entries(this.literalTextColorDecorators)) {
+            if (this.literalDecorationsTextColor[colorname]) {
+                this.activeEditor.setDecorations(decorator, this.literalDecorationsTextColor[colorname]);
             }
         }
     }
     
 }
 
-function decorateText(doctext : string, activeEditor : vscode.TextEditor): void {
-    decorate.processText(doctext, new DecorateGrid(activeEditor));
+function decorateText(doctext : string, decorator: DecorateGrid): void {
+	decorate.processText(doctext, decorator);
+    //decorate.processText(doctext, new DecorateGrid(activeEditor));
 }
 
 function activeText() : string {
@@ -206,16 +258,24 @@ export function activate(context: vscode.ExtensionContext) {
 		Promise.all([exportHtml.exportToHtml(context.extensionPath)]);
 	}));
 
+	let editorToDecorator : Map<vscode.TextEditor, DecorateGrid> = new Map<vscode.TextEditor, DecorateGrid>();
 	// Add text decorator for grid items
-	console.log("voila voila");
 	for (const editor of vscode.window.visibleTextEditors) {
 		if (editor.document.languageId === "puzzlescript") {
-			decorateText(editor.document.getText(), editor);
+			if (!editorToDecorator.get(editor)) {
+				editorToDecorator.set(editor, new DecorateGrid(editor));
+			}
+			editorToDecorator.get(editor)?.clean();
+			decorateText(editor.document.getText(), editorToDecorator.get(editor) as DecorateGrid);
 		}
 	}
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		if (editor?.document.languageId === "puzzlescript") {
-			decorateText(editor.document.getText(), editor);
+			if (!editorToDecorator.get(editor)) {
+				editorToDecorator.set(editor, new DecorateGrid(editor));
+			}
+			editorToDecorator.get(editor)?.clean();
+			decorateText(editor.document.getText(), editorToDecorator.get(editor) as DecorateGrid);
 		}
 	}, null, context.subscriptions);
 
@@ -223,7 +283,11 @@ export function activate(context: vscode.ExtensionContext) {
 		if (event.document.languageId === "puzzlescript") {
 			let activeEditor = vscode.window.activeTextEditor;
 			if (activeEditor) {
-				decorateText(event.document.getText(), activeEditor);
+				if (!editorToDecorator.get(activeEditor)) {
+					editorToDecorator.set(activeEditor, new DecorateGrid(activeEditor));
+				}
+				editorToDecorator.get(activeEditor)?.clean();
+				decorateText(event.document.getText(), editorToDecorator.get(activeEditor) as DecorateGrid);
 			}
 
 		}
