@@ -223,21 +223,21 @@ objects
 
 myObject
 red blue green #000111
-.0123
-.0123
-.0123
-.0123
-.0123
+.01234
+.01234
+.01234
+.01234
+.01234
 
 (-- Comment --)
 
 myOtherObject
-red blue green
-.0123
-.0123
-.0123
-.0123
-.0123
+red blue green #000111
+.01234
+.01234
+.01234
+.01234
+.01234
 `;
             decorate.processText(code, 
                 {
@@ -261,7 +261,7 @@ red blue green
                             }
                         }
                     },
-                    processLiteralColor: (colors: string, _line : number, _colStart : number, _colEnd : number) => {
+                    processLiteralColor: (colors: string, line : number, colStart : number, colEnd : number) => {
                         assert.strictEqual(colors, "#000111");
                     },
                     processGrid: (colors : string | undefined, _line : number, col : number, _lines : string[]) => {
@@ -279,8 +279,11 @@ red blue green
                                 break;
                             }
                             case 4: {
-                                assert.strictEqual(colors, undefined);
+                                assert.strictEqual(colors, "#000111");
                                 break;
+                            }
+                            case 5: {
+                                assert.strictEqual(colors, undefined);
                             }
                             default: assert.fail();
                         }
