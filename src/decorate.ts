@@ -72,6 +72,7 @@ export function initializeDecorations() : Record<string, Array<vscode.Decoration
 export abstract class GridProcessor {
     abstract beforeProcess() : void;
 	abstract processColor(color : string, line : number, colStart : number, colEnd : number) : void;
+	abstract processLiteralColor(color : string, line : number, colStart : number, colEnd : number) : void;
     abstract processGrid(colors : string, line : number, col : number, lines : string[]) : void;
     abstract afterProcess() : void;
 }
@@ -98,16 +99,20 @@ export function processText(doctext : string, grid : GridProcessor){
 					continue;
 				}
 				let colors = [];
-				const wordRe = /\w+/g;
+				const wordRe = /#?\w+/g;
 				colorProcess:
 				while (true) {
 					let match = wordRe.exec(lines[i + 1]);
 					if (match) {
+						console.log("Match is: ", match);
 						assert.strictEqual(match.length, 1);
 						assert.notStrictEqual(match[0], "");
 						let color = match[0].toLowerCase();
 						if (colorMap[color]) {
 							grid.processColor(color, i + 1, match.index, match.index + match[0].length);
+							colors.push(color);
+						} else if (color.indexOf("#") === 0 && /^#([0-9]{6}|[0-9]{3})$/.exec(color) !== null) {
+							grid.processLiteralColor(color, i + 1, match.index, match.index + match[0].length);
 							colors.push(color);
 						}
 					} else {

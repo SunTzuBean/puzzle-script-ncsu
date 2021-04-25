@@ -103,6 +103,10 @@ myObject
                         // No colors, never called
                         assert.fail();
                     },
+                    processLiteralColor: (_colors: string, _line : number, _colStart : number, _colEnd : number) => {
+                        // No colors, never called
+                        assert.fail();
+                    },
                     processGrid: (_colors : string, _line : number, _col : number, _lines : string[]) => {
                         // Nothing to color, should never be called
                         assert.fail();
@@ -118,6 +122,10 @@ myObject
                 {
                     beforeProcess: () => {},
                     processColor: (_colors: string, _line : number, _colStart : number, _colEnd : number) => {
+                        // No colors, never called
+                        assert.fail();
+                    },
+                    processLiteralColor: (_colors: string, _line : number, _colStart : number, _colEnd : number) => {
                         // No colors, never called
                         assert.fail();
                     },
@@ -141,6 +149,10 @@ MyObject`;
                         // No colors, never called
                         assert.fail();
                     },
+                    processLiteralColor: (_colors: string, _line : number, _colStart : number, _colEnd : number) => {
+                        // No colors, never called
+                        assert.fail();
+                    },
                     processGrid: (_colors : string | undefined, _line : number, _col : number, _lines : string[]) => {
                         // Nothing to color, should never be called
                         assert.fail();
@@ -159,6 +171,10 @@ elmo`;
                 {
                     beforeProcess: () => {},
                     processColor: (_colors: string, _line : number, _colStart : number, _colEnd : number) => {
+                        // No colors, never called
+                        assert.fail();
+                    },
+                    processLiteralColor: (_colors: string, _line : number, _colStart : number, _colEnd : number) => {
                         // No colors, never called
                         assert.fail();
                     },
@@ -188,6 +204,10 @@ myObject
                         // No colors, never called
                         assert.fail();
                     },
+                    processLiteralColor: (_colors: string, _line : number, _colStart : number, _colEnd : number) => {
+                        // No colors, never called
+                        assert.fail();
+                    },
                     processGrid: (_colors : string | undefined, _line : number, _col : number, _lines : string[]) => {
                         // Nothing to color, should never be called
                         assert.fail();
@@ -202,7 +222,7 @@ myObject
 objects
 
 myObject
-red blue green
+red blue green #000111
 .0123
 .0123
 .0123
@@ -240,6 +260,9 @@ red blue green
                                 assert.fail();
                             }
                         }
+                    },
+                    processLiteralColor: (colors: string, _line : number, _colStart : number, _colEnd : number) => {
+                        assert.strictEqual(colors, "#000111");
                     },
                     processGrid: (colors : string | undefined, _line : number, col : number, _lines : string[]) => {
                         switch (col) {

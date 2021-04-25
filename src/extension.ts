@@ -13,13 +13,27 @@ import { PuzzleScriptCompletionItemProvider } from "./completionProvider";
 let fs = require("fs");
 
 const availableDecorators : Record<string, vscode.TextEditorDecorationType> = {};
+const availableTextColorDecorators : Record<string, vscode.TextEditorDecorationType> = {};
 
+const foreground = new vscode.ThemeColor("foreground");
 for (const color of decorate.availableColors) {
 	availableDecorators[color] = vscode.window.createTextEditorDecorationType({
-		cursor: 'crosshair',
 		backgroundColor: {id: 'puzzlescript.' + color},
-		color: "#000000",
+		color: foreground,
 		opacity: '0.25',
+	});
+	availableTextColorDecorators[color] = vscode.window.createTextEditorDecorationType({
+		// robbed from VSCode's source itself. See "colorDetector.ts"
+		before: {
+			contentText: ' ',
+			border: "0.1em solid",
+			borderColor: foreground,
+			margin: '0.1em 0.2em 0 0.2em',
+			width: '0.8em',
+			height: '0.8em',
+			backgroundColor: color
+		},
+		color: foreground
 	});
 }
 
@@ -27,6 +41,8 @@ class DecorateGrid extends decorate.GridProcessor {
 
     activeEditor : vscode.TextEditor;
     decorations : undefined | Record<string, vscode.DecorationOptions[]>;
+	decorationsTextColor : undefined | Record<string, vscode.DecorationOptions[]>;
+	literalTextColorDecorators : Record<string, vscode.TextEditorDecorationType> = {};
 
     constructor (activeEditor : vscode.TextEditor) {
         super();
@@ -34,13 +50,28 @@ class DecorateGrid extends decorate.GridProcessor {
     }
 
 	processColor(color: string, line: number, colStart: number, colEnd: number): void {
-		if (this.decorations && this.decorations[color]) {
-            this.decorations[color].push({range: new vscode.Range(new vscode.Position(line, colStart), new vscode.Position(line, colEnd))});
+		if (this.decorationsTextColor && this.decorationsTextColor[color]) {
+            this.decorationsTextColor[color].push({range: new vscode.Range(new vscode.Position(line, colStart), new vscode.Position(line, colEnd))});
         }
+	}
+
+	processLiteralColor(color: string, line: number, colStart: number, colEnd: number): void {
+		if (!this.literalTextColorDecorators[color]) {
+			this.literalTextColorDecorators[color] = vscode.window.createTextEditorDecorationType({
+				backgroundColor: color,
+				color: foreground,
+				opacity: '0.25'
+			});
+		}
+		if (this.decorationsTextColor && !this.decorationsTextColor[color]) {
+			this.decorationsTextColor[color] = [];
+			this.processColor(color, line, colStart, colEnd);
+		}
 	}
 
     beforeProcess(): void {
         this.decorations = decorate.initializeDecorations();
+		this.decorationsTextColor = decorate.initializeDecorations();
     }
     processGrid(color: string, line: number, col: number, lines: string[]): void {
         if (this.decorations && this.decorations[color]) {
@@ -51,6 +82,11 @@ class DecorateGrid extends decorate.GridProcessor {
         for (const [colorname, decorator] of Object.entries(availableDecorators)) {
             if (this.decorations) {
                 this.activeEditor.setDecorations(decorator, this.decorations[colorname]);
+            }
+        }
+		for (const [colorname, decorator] of Object.entries(availableTextColorDecorators)) {
+            if (this.decorationsTextColor) {
+                this.activeEditor.setDecorations(decorator, this.decorationsTextColor[colorname]);
             }
         }
     }
