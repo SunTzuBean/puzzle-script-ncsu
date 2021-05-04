@@ -98,7 +98,7 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
     public generateMatchedObjects(section : string, completionList : vscode.CompletionItem[]) {
         if (section === "LEGEND" || section === "WINCONDITIONS" || section === "COLLISIONLAYERS" || section === "RULES" || section === "SOUNDS") {
             console.log("In section to complete!");
-            for (const [_, objectName] of Object.values(this.objectNames)) {
+            for (const objectName of Object.values(this.objectNames)) {
                 const completionItem = new vscode.CompletionItem(objectName);
                 completionItem.kind = vscode.CompletionItemKind.Function;
                 console.log("pushing:", objectName);
