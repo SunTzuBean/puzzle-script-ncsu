@@ -7,7 +7,6 @@ import * as gamePreview from "./game-preview";
 import * as levelEditor from "./level-editor";
 import * as exportHtml from "./export-html";
 import * as decorate from "./decorate";
-import { ENGINE_METHOD_PKEY_METHS } from "constants";
 import { PuzzleScriptCompletionItemProvider } from "./completionProvider";
 
 let fs = require("fs");
@@ -36,20 +35,45 @@ for (const color of decorate.availableColors) {
 		color: foreground
 	});
 }
+const availableObjectDecorator = vscode.window.createTextEditorDecorationType({
+	color: foreground,
+	textDecoration: "underline",
+});
 
 class DecorateGrid extends decorate.GridProcessor {
-
     activeEditor : vscode.TextEditor;
     decorations : undefined | Record<string, vscode.DecorationOptions[]>;
 	decorationsTextColor : undefined | Record<string, vscode.DecorationOptions[]>;
 	literalDecorators : Record<string, vscode.TextEditorDecorationType> = {};
 	literalTextColorDecorators : Record<string, vscode.TextEditorDecorationType> = {};
 	literalDecorationsTextColor: Record<string, vscode.DecorationOptions[]> = {};
+	objectDecorations : Array<vscode.DecorationOptions> = [];
 
     constructor (activeEditor : vscode.TextEditor) {
         super();
         this.activeEditor = activeEditor;
     }
+
+
+	objectName(name: string): void {
+		console.log("this is: ", this);
+		console.log("activeEditor is: ", this.activeEditor);
+		let doctext = this.activeEditor.document.getText().split("\n");
+		console.log("name is: ", name);
+		let substrIndex = -1;
+		for (var i = 0; i < doctext.length; i++) {
+			substrIndex = -1;
+			while (true) {
+				substrIndex = doctext[i].indexOf(name, substrIndex + 1);
+				if (substrIndex === -1) {
+					break;
+				}
+				console.log("object starting at: ", i, substrIndex);
+				console.log("in line: ", doctext[i]);
+				this.objectDecorations.push({range: new vscode.Range(new vscode.Position(i, substrIndex), new vscode.Position(i, substrIndex + name.length))});
+			}
+		}
+	}
 
 	beforeProcess(): void {
         this.decorations = decorate.initializeDecorations();
@@ -73,6 +97,7 @@ class DecorateGrid extends decorate.GridProcessor {
 		for (const [_, decorator] of Object.entries(availableTextColorDecorators)) {
 			this.activeEditor.setDecorations(decorator, []);
 		}
+		this.activeEditor.setDecorations(availableObjectDecorator, []);
 	}
 
 	processColor(color: string, line: number, colStart: number, colEnd: number): void {
@@ -140,6 +165,7 @@ class DecorateGrid extends decorate.GridProcessor {
                 this.activeEditor.setDecorations(decorator, this.literalDecorationsTextColor[colorname]);
             }
         }
+		this.activeEditor.setDecorations(availableObjectDecorator, this.objectDecorations);
     }
     
 }

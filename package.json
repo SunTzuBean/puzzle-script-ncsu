@@ -1,5 +1,6 @@
 {
     "name": "puzzlescript",
+    "publisher": "ixdoming",
     "displayName": "PuzzleScript",
     "description": "A PuzzleScript language extension that provides syntax highlighting, code completion, level editors, and much more from inside VS Code.",
     "version": "0.0.1",

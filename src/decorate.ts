@@ -75,6 +75,7 @@ export abstract class GridProcessor {
 	abstract processLiteralColor(color : string, line : number, colStart : number, colEnd : number) : void;
     abstract processGrid(colors : string, line : number, col : number, lines : string[]) : void;
     abstract afterProcess() : void;
+	abstract objectName(name : string) : void;
 }
 
 export function processText(doctext : string, grid : GridProcessor){
@@ -95,6 +96,7 @@ export function processText(doctext : string, grid : GridProcessor){
 				continue;
 			}
 			if (lines[i].match(/^\$?[a-zA-Z_][0-9a-zA-Z_]+( \$?[a-zA-Z_.#])?$/)) {
+				let name = lines[i].split("\n").join("").split("\r").join("").split(" ").slice(0, 1).forEach(x => grid.objectName(x));
 				if (i + 1 >= lines.length) {
 					continue;
 				}

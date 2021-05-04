@@ -111,6 +111,9 @@ myObject
                         // Nothing to color, should never be called
                         assert.fail();
                     },
+                    objectName: (name) => {
+                        assert.strictEqual(name, "myObject");
+                    },
                     afterProcess: done,
                 }
             );
@@ -131,6 +134,9 @@ myObject
                     },
                     processGrid: (_colors : string | undefined, _line : number, _col : number, _lines : string[]) => {
                         // Nothing to color, should never be called
+                        assert.fail();
+                    },
+                    objectName: (name) => {
                         assert.fail();
                     },
                     afterProcess: done,
@@ -157,6 +163,9 @@ MyObject`;
                         // Nothing to color, should never be called
                         assert.fail();
                     },
+                    objectName: (name) => {
+                        assert.strictEqual(name, "MyObject");
+                    },
                     afterProcess: done,
                 }
             );
@@ -181,6 +190,9 @@ elmo`;
                     processGrid: (_colors : string | undefined, _line : number, _col : number, _lines : string[]) => {
                         // Nothing to color, should never be called
                         assert.fail();
+                    },
+                    objectName : (name) => {
+                        assert.strictEqual(name, "MyObject");
                     },
                     afterProcess: done,
                 }
@@ -211,6 +223,9 @@ myObject
                     processGrid: (_colors : string | undefined, _line : number, _col : number, _lines : string[]) => {
                         // Nothing to color, should never be called
                         assert.fail();
+                    },
+                    objectName: (name) => {
+                        assert.strictEqual(name, "myObject");
                     },
                     afterProcess: done,
                 }
@@ -287,6 +302,9 @@ red blue green #000111
                             }
                             default: assert.fail();
                         }
+                    },
+                    objectName: (name) => {
+                        assert.ok(name === "myObject" || name === "myOtherObject");
                     },
                     afterProcess: done,
                 }
