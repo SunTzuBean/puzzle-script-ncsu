@@ -7,6 +7,8 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
     colors : string[];
     sections : string[];
     headerKeywords : string[];
+    // TODO XXX MAKE THIS NOT PUBLIC!
+    public objectNames : Record<string, string> = {};
 
     constructor() {
         this.colors = ['BLACK', 'WHITE', 'LIGHTGRAY', 'GREYGRAY', 'GREY', 'DARKGRAY', 'GREY', 'RED', 'DARKRED', 'LIGHTRED','BROWN', 'DARKBROWN', 'LIGHTBROWN', 'ORANGE', 'YELLOW', 'GREEN', 'DARKGREEN', 'LIGHTGREEN', 'BLUE', 'LIGHTBLUE', 'DARKBLUE', 'PURPLE', 'PINK', 'TRANSPARENT'];
@@ -35,6 +37,7 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
         let section = this.determineSection(document, position, completionList);
         //populate completion item list with each type of completion item
         this.generateHeaderKeyworkItems(document, position, section, completionList);
+        this.generateMatchedObjects(section, completionList);
         this.generateObjectCompletionItems(document, position, section, completionList);
         this.generateColorCodeCompletions(document, position, section, completionList); 
         return completionList;
@@ -85,9 +88,22 @@ export class PuzzleScriptCompletionItemProvider implements vscode.CompletionItem
             if(this.colors.indexOf(word.toUpperCase()) == -1 && this.sections.indexOf(word.toUpperCase()) == -1) {
                 const completionItem = new vscode.CompletionItem(word);
                 completionItem.kind = vscode.CompletionItemKind.Text;
+                console.log("pushing: ", word);
                 completionList.push(completionItem);
             }
             w = text.match('[a-zA-Z][a-zA-Z_0-9]*');
+        }
+    }
+
+    public generateMatchedObjects(section : string, completionList : vscode.CompletionItem[]) {
+        if (section === "LEGEND" || section === "WINCONDITIONS" || section === "COLLISIONLAYERS" || section === "RULES" || section === "SOUNDS") {
+            console.log("In section to complete!");
+            for (const [_, objectName] of Object.values(this.objectNames)) {
+                const completionItem = new vscode.CompletionItem(objectName);
+                completionItem.kind = vscode.CompletionItemKind.Function;
+                console.log("pushing:", objectName);
+                completionList.push(completionItem);
+            }         
         }
     }
 

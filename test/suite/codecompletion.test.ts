@@ -21,7 +21,7 @@ suite('Extension Tests', () => {
             completionprovider.provideCompletionItems(doc, position, token).then((completionItems) => {
                 assert.strictEqual(completionprovider.headerKeywords.length + 2, completionItems.length);
             });
-        })
+        });
     });
 
     test("Suggest Colors", () => {

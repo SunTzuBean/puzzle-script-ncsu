@@ -48,16 +48,17 @@ class DecorateGrid extends decorate.GridProcessor {
 	literalTextColorDecorators : Record<string, vscode.TextEditorDecorationType> = {};
 	literalDecorationsTextColor: Record<string, vscode.DecorationOptions[]> = {};
 	objectDecorations : Array<vscode.DecorationOptions> = [];
+	completionProvider : PuzzleScriptCompletionItemProvider;
 
-    constructor (activeEditor : vscode.TextEditor) {
+    constructor (activeEditor : vscode.TextEditor, completionProvider : PuzzleScriptCompletionItemProvider) {
         super();
         this.activeEditor = activeEditor;
+		this.completionProvider = completionProvider;
     }
 
 
 	objectName(name: string): void {
-		console.log("this is: ", this);
-		console.log("activeEditor is: ", this.activeEditor);
+		this.completionProvider.objectNames[name] = name;
 		let doctext = this.activeEditor.document.getText().split("\n");
 		console.log("name is: ", name);
 		let substrIndex = -1;
@@ -68,8 +69,6 @@ class DecorateGrid extends decorate.GridProcessor {
 				if (substrIndex === -1) {
 					break;
 				}
-				console.log("object starting at: ", i, substrIndex);
-				console.log("in line: ", doctext[i]);
 				this.objectDecorations.push({range: new vscode.Range(new vscode.Position(i, substrIndex), new vscode.Position(i, substrIndex + name.length))});
 			}
 		}
@@ -99,6 +98,7 @@ class DecorateGrid extends decorate.GridProcessor {
 		}
 		this.activeEditor.setDecorations(availableObjectDecorator, []);
 		this.objectDecorations = [];
+		this.completionProvider.objectNames = {};
 	}
 
 	processColor(color: string, line: number, colStart: number, colEnd: number): void {
@@ -220,7 +220,8 @@ export function activate(context: vscode.ExtensionContext) {
 	// register a new CompletionItemProvider with extension. This provider will add custom code completion using vscode's intellisense.
 	// this completion item provider will only provide completion suggestions when editing puzzlescript files. 
 	let sel : vscode.DocumentSelector = { language : 'puzzlescript', scheme: 'file' };
-	let codeCompletionDisposable = vscode.languages.registerCompletionItemProvider(sel, new PuzzleScriptCompletionItemProvider(), '');
+	let completionProvider = new PuzzleScriptCompletionItemProvider();
+	let codeCompletionDisposable = vscode.languages.registerCompletionItemProvider(sel, completionProvider, '');
 	context.subscriptions.push(codeCompletionDisposable);
 
 	/*
@@ -290,7 +291,7 @@ export function activate(context: vscode.ExtensionContext) {
 	for (const editor of vscode.window.visibleTextEditors) {
 		if (editor.document.languageId === "puzzlescript") {
 			if (!editorToDecorator.get(editor)) {
-				editorToDecorator.set(editor, new DecorateGrid(editor));
+				editorToDecorator.set(editor, new DecorateGrid(editor, completionProvider));
 			}
 			editorToDecorator.get(editor)?.clean();
 			decorateText(editor.document.getText(), editorToDecorator.get(editor) as DecorateGrid);
@@ -299,7 +300,7 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		if (editor?.document.languageId === "puzzlescript") {
 			if (!editorToDecorator.get(editor)) {
-				editorToDecorator.set(editor, new DecorateGrid(editor));
+				editorToDecorator.set(editor, new DecorateGrid(editor, completionProvider));
 			}
 			editorToDecorator.get(editor)?.clean();
 			decorateText(editor.document.getText(), editorToDecorator.get(editor) as DecorateGrid);
@@ -311,7 +312,7 @@ export function activate(context: vscode.ExtensionContext) {
 			let activeEditor = vscode.window.activeTextEditor;
 			if (activeEditor) {
 				if (!editorToDecorator.get(activeEditor)) {
-					editorToDecorator.set(activeEditor, new DecorateGrid(activeEditor));
+					editorToDecorator.set(activeEditor, new DecorateGrid(activeEditor, completionProvider));
 				}
 				editorToDecorator.get(activeEditor)?.clean();
 				decorateText(event.document.getText(), editorToDecorator.get(activeEditor) as DecorateGrid);
