@@ -98,6 +98,7 @@ class DecorateGrid extends decorate.GridProcessor {
 			this.activeEditor.setDecorations(decorator, []);
 		}
 		this.activeEditor.setDecorations(availableObjectDecorator, []);
+		this.objectDecorations = [];
 	}
 
 	processColor(color: string, line: number, colStart: number, colEnd: number): void {
