@@ -119,8 +119,37 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register the Export to HTML feature
   context.subscriptions.push(
-    vscode.commands.registerCommand("puzzlescript.exportHtml", () => {
-      exportHtml.exportToHtml(context.extensionUri.path);
+    vscode.commands.registerCommand("puzzlescript.exportHtml", async () => {
+      var editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        pzConsole.appendLine(
+          "No active text editor; please open a PuzzleScript file to export!"
+        );
+        pzConsole.show();
+      } else {
+        // Get the uri of the active document
+        let activeUri = editor.document.uri;
+        // Get the intended export path/filename from the user
+        var saveDir: vscode.Uri = vscode.Uri.file(
+          path.join(
+            path.dirname(activeUri.path),
+            await exportHtml._askForPath()
+          )
+        );
+        var htmlString: string = "";
+        try {
+          htmlString = await exportHtml.exportToHtml(
+            context.extensionUri.path,
+            editor.document.getText()
+          );
+          exportHtml._saveToFile(htmlString, saveDir);
+        } catch (e) {
+          pzConsole.appendLine(
+            "There was an error Exporting to HTML. Please try again later."
+          );
+          pzConsole.show();
+        }
+      }
     })
   );
 

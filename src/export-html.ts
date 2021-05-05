@@ -8,23 +8,7 @@ import { fstat } from "fs";
 import { TextEncoder, TextDecoder } from "util";
 import { NONAME } from "dns";
 
-export async function exportToHtml(extensionPath: string) {
-  var editor = window.activeTextEditor;
-  if (!editor) {
-    return; // No open editor
-  }
-
-  // Get the uri of the active document
-  let activeUri = editor.document.uri;
-
-  // Get the intended export path/filename from the user
-  var savedir: vscode.Uri = vscode.Uri.file(
-    path.join(path.dirname(activeUri.path), await _askForPath())
-  );
-
-  // Get the source code as a string
-  var sourceCode = editor.document.getText();
-
+export async function exportToHtml(extensionPath: string, sourceCode: string) {
   // Stringify the source code
   sourceCode = JSON.stringify(sourceCode);
 
@@ -56,11 +40,10 @@ export async function exportToHtml(extensionPath: string) {
   htmlString = htmlString.split("__HOMEPAGE__").join(homepage);
   htmlString = htmlString.split("__GAMEDAT__").join(sourceCode);
 
-  // Save the file
-  _saveToFile(htmlString, savedir);
+  return htmlString;
 }
 
-async function _askForPath() {
+export async function _askForPath() {
   // Get a file path via VSCode InputBox; default to 'game.html' in the root dir
   const filepath: string =
     (await window.showInputBox({
@@ -70,6 +53,6 @@ async function _askForPath() {
   return filepath;
 }
 
-async function _saveToFile(content: string, path: vscode.Uri) {
+export async function _saveToFile(content: string, path: vscode.Uri) {
   workspace.fs.writeFile(path, new TextEncoder().encode(content));
 }
