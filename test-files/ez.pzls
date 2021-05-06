@@ -1,13 +1,12 @@
-title Easy Block Pushing Game
-author David Skinner
-homepage www.puzzlescript.net
+
+background_color BLACK
 
 ========
 OBJECTS
 ========
 
 Background
-LIGHTGREEN GREEN
+GREEN LIGHTGREEN
 11111
 01111
 11101

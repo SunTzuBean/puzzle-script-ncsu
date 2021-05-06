@@ -12,9 +12,28 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 }
 
 export abstract class WebviewPanel {
+	public asWebviewUri(uri : vscode.Uri) : vscode.Uri | undefined {
+		if (this.innerPanel) {
+			return this.innerPanel.webview.asWebviewUri(uri);
+		}
+		return undefined;
+	}
+	private innerPanel : vscode.WebviewPanel | undefined;
+	public setInnerPanel(panel : vscode.WebviewPanel | undefined) {
+		this.innerPanel = panel;
+	}
 	abstract content() : Promise<string>;
 	abstract viewType() : string;
 	abstract title() : string;
+
+	public afterInitialization() : void {
+		// By default, do nothing
+	};
+	public postMessage(json: any) : void {
+		if (this.innerPanel) {
+			this.innerPanel.webview.postMessage(json);
+		}
+	}
 }
 
 /**
@@ -24,11 +43,18 @@ export class Webview {
 	private _panel: vscode.WebviewPanel | undefined;
 	private _options : WebviewPanel;
 	private _disposables: vscode.Disposable[] = [];
+	private _console: vscode.OutputChannel;
+	private _gameData : string = "";
+
+	public setGameData(str : string) {
+		this._gameData = str;
+	}
 
 	public viewType() : string {
 		return this._options.viewType();
 	}
 
+	
 	public createOrShow(extensionUri: vscode.Uri) {
         if (this._panel) {
 			const column = vscode.window.activeTextEditor
@@ -43,7 +69,7 @@ export class Webview {
 				vscode.ViewColumn.Beside,
 				getWebviewOptions(extensionUri),
 			);
-
+			this._options.setInnerPanel(this._panel);
 			// Set the webview's initial html content
 			this._update();
 
@@ -71,6 +97,18 @@ export class Webview {
 						case 'alert':
 							vscode.window.showErrorMessage(message.text);
 							return;
+						case 'consoleLog':
+							this._console.appendLine(message.text);
+							return;
+						case 'clearConsole':
+							this._console.clear();
+						case 'afterInitialization':
+							this._panel?.webview.postMessage({command: "gameData", text: this._gameData.split("\r").join("")});
+							this._options.afterInitialization();
+							return;
+						default: 
+							console.log("message unused", message);
+							return;
 					}
 				},
 				null,
@@ -88,8 +126,9 @@ export class Webview {
 		);
 	}
 
-	public constructor(options : WebviewPanel) {
+	public constructor(options : WebviewPanel, gameConsole: vscode.OutputChannel) {
 		this._options = options;
+		this._console = gameConsole;
 	}
 
 	public dispose() {
@@ -106,6 +145,7 @@ export class Webview {
 		}
 
 		this._panel = undefined;
+		this._options.setInnerPanel(undefined);
 	}
 
 	private _update() {
@@ -117,6 +157,5 @@ export class Webview {
 				}
 			});
 		}
-
 	}
 }

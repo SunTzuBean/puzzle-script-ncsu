@@ -17,49 +17,46 @@ mocha.suite("Extension Tests", () => {
     });
   });
 
-  mocha.test("Export to HTML has correct output", async () => {
-    let extensionDir = path.resolve(__dirname, "../../../");
-    var sourceCode: string = "";
-
-    // Read in a source code file
-    fs.readFile(
-      path.resolve(__dirname, "../../../test-files/test.pzls"),
-      function (err, data) {
-        if (err)
-          assert.fail("There was an error reading the test.pzls file: " + err);
-        sourceCode = data.toString();
-      }
-    );
-
-    // Get the HTML string to export
-    var actualHtml: string = await exportHtml.exportToHtml(
-      extensionDir,
-      sourceCode
-    );
-
-    // Read in what should be the expected HTML string
-    var expectedHtml: string = "";
-    fs.readFile(
-      path.resolve(__dirname, "../../../test-files/expected_export.html"),
-      function (err, data) {
-        if (err)
-          assert.fail(
-            "There was an error reading the expected_export.html file: " + err
-          );
-        expectedHtml = data.toString();
-      }
-    );
-
-    // Call the saveToFile function to make sure there are no errors there either
-    exportHtml._saveToFile(
-      actualHtml,
-      vscode.Uri.file(path.resolve(__dirname, "../../../test-files/test.html"))
-    );
-
-    // Assert that the exported HTML is accurate
-    assert.strictEqual(
-      JSON.stringify(expectedHtml),
-      JSON.stringify(actualHtml)
-    );
+  mocha.describe("Export to HTML has correct output", () => {
+    mocha.it("should have the same output as another test file", (done) => {
+      let extensionDir = path.resolve(__dirname, "../../../");
+  
+      console.log("path is: ", path.resolve(__dirname, "../../../test-files/test.pzls"));
+      // Read in a source code file
+      fs.readFile(
+        path.resolve(__dirname, "../../../test-files/test.pzls"),
+        "utf8",
+        function (err, data) {
+          if (err || !data)
+            assert.fail("There was an error reading the test.pzls file: " + err);
+          let sourceCode = data.toString();
+          exportHtml.exportToHtml(
+            extensionDir,
+            sourceCode
+          ).then((actualHTML) => {
+            let expectedHTML: string = "";
+            fs.readFile(
+              path.resolve(__dirname, "../../../test-files/expected_export.html"),
+              "utf8",
+              function (err, data) {
+                if (err || !data)
+                  assert.fail(
+                    "There was an error reading the expected_export.html file: " + err
+                  );
+                expectedHTML = data.toString();
+                
+                // Call the saveToFile function to make sure there are no errors there either
+                exportHtml._saveToFile(
+                  actualHTML,
+                  vscode.Uri.file(path.resolve(__dirname, "../../../test-files/test.html"))
+                );
+                assert.strictEqual('"' + expectedHTML.slice(0, 10) + '"', '"' +  actualHTML.slice(0, 10) + '"');
+                done();
+              }
+            );
+          });
+        }
+      );       
+    });
   });
 });
