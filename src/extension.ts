@@ -283,6 +283,27 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register the Export to HTML feature
 	context.subscriptions.push(vscode.commands.registerCommand('puzzlescript.exportHtml', () => {
+                exportHtml.exportToHtml(context.extensionPath, activeText()).then((htmlText) =>
+                	exportHtml._askForPath().then((pathName) => {
+						let editor = vscode.window.activeTextEditor;
+
+						if (!editor) {
+							vscode.window.showErrorMessage("No open editor");
+							return; // No open editor
+						}
+						
+						// Get the uri of the active document
+						let activeUri = editor.document.uri;
+						
+						// Get the intended export path/filename from the user
+						var savedir: vscode.Uri = vscode.Uri.file(
+							path.join(path.dirname(activeUri.path), pathName)
+						);
+
+						exportHtml._saveToFile(htmlText, savedir);
+						
+					})
+                );
 		Promise.all([exportHtml.exportToHtml(context.extensionPath, activeText())]);
 	}));
 
